@@ -308,3 +308,8 @@ later(function()
     },
   })
 end)
+
+later(function()
+  add('saghen/blink.cmp')
+  require('blink.cmp').setup()
+end)
