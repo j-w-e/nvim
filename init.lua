@@ -1,10 +1,11 @@
 -- j-w-e's nvim config
 -- (Based from MiniMax, and extensively using MINI.nvim)
 
+-- This config exists in two branches simultaneously. The main branch uses mini.completion.
+-- The 'blink' branch uses blink.cmp, for the moment, in order to have completion for obsidian.nvim.
+-- using NVIM-APPNAME=blink, I run nvim with a specific config depending on whether I am using obsidian or not.
+
 --[[ TODO list
-1. Find out if I can use Obsidian.nvim with mini.completion.
-  - Or just use blink.cmp / cmp.nvim, for just obsidian files
-  - Or use two versions of my nvim config, one with blink (just for notes) and one with mini.completion
 2. Find out why R.nvim doesn't respect <bs> as a localleader.
 3. Remap U and <c-r> to undo.
 5. Set up the 'core' label for key notes eg team.
