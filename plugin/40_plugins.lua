@@ -297,6 +297,7 @@ now_if_args(function()
       highlights.RenderMarkdownCode = { bg = '#16161e' } -- this is for a dark background to code blocks
     end,
   })
+  vim.cmd('colorscheme tokyonight')
 end)
 
 later(function()

@@ -6,9 +6,9 @@ local now, later = MiniDeps.now, MiniDeps.later
 local now_if_args = _G.Config.now_if_args
 
 -- Step one ===================================================================
-now(function()
-  vim.cmd('colorscheme miniwinter')
-end)
+-- now(function()
+--   vim.cmd('colorscheme miniwinter')
+-- end)
 
 -- Common configuration presets.
 now(function()
