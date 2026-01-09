@@ -310,6 +310,9 @@ later(function()
 end)
 
 later(function()
-  add('saghen/blink.cmp')
+  add({
+    source = 'saghen/blink.cmp',
+    checkout = 'b19413d214068f316c78978b08264ed1c41830ec',
+  })
   require('blink.cmp').setup()
 end)
