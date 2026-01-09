@@ -126,11 +126,24 @@ later(function()
 end)
 
 later(function()
+  add({
+    source = 'saghen/blink.cmp',
+    checkout = 'b19413d214068f316c78978b08264ed1c41830ec',
+  })
+  require('blink.cmp').setup()
+end)
+
+later(function()
   add({ source = 'obsidian-nvim/obsidian.nvim', checkout = 'f513608b6a413d82cb228bba0179a36190b22d21' })
   require('obsidian').setup({
     legacy_commands = false,
     ui = { enable = false },
     checkbox = { create_new = false },
+    completion = {
+      nvim_cmp = false,
+      blink = true,
+      create_new = true,
+    },
     workspaces = {
       {
         name = 'work',
