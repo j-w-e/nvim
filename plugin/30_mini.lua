@@ -62,8 +62,9 @@ end)
 -- manages session files.
 now(function()
   require('mini.sessions').setup({
-    autowrite = false,
-    directory = '~/.local/share/nvim/session', --<"session" subdir of user data directory from |stdpath()|>,
+    autowrite = true,
+    autoread = true,
+    directory = '~/.local/share/nvim-blink/session', --<"session" subdir of user data directory from |stdpath()|>,
     file = 'dirSession.vim',
     force = { read = false, write = true, delete = false },
     verbose = { read = false, write = true, delete = true },
