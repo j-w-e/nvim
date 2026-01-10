@@ -285,21 +285,6 @@ later(function()
   })
 end)
 
-now_if_args(function()
-  add('folke/tokyonight.nvim')
-  require('tokyonight').setup({
-    style = 'storm',
-    on_highlights = function(highlights, colors)
-      highlights.FlashLabel = { bg = colors.blue0, fg = colors.magenta }
-      highlights.MiniTrailspace = { fg = colors.magenta }
-      highlights.CursorLine = { bg = colors.fg_gutter }
-      -- highlights.RenderMarkdownCode = { bg = colors.fg_gutter }  -- this is a lighter backgroud for code blocks. I got tired of it
-      highlights.RenderMarkdownCode = { bg = '#16161e' } -- this is for a dark background to code blocks
-    end,
-  })
-  vim.cmd('colorscheme tokyonight')
-end)
-
 later(function()
   add({ source = 'chrishrb/gx.nvim', depends = { 'nvim-lua/plenary.nvim' } })
   require('gx').setup({
