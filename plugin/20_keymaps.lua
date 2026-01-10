@@ -153,8 +153,14 @@ nmap_leader('m.', '@:', 'Repeat last command')
 nmap_leader('md', '<cmd>lcd %:p:h<cr>', 'Local cd to file')
 
 -- o is for 'Obsidian'.
-nmap_leader('oz', '<Cmd>lua MiniMisc.zoom()<CR>',          'Zoom toggle')
-nmap_leader('on', '<cmd>Obsidian new_from_template<cr>', 'New note')
+local meeting_note = function ()
+  local note_name = vim.fn.input("Enter meeting name: ")
+  vim.cmd('Obsidian new_from_template ' .. note_name .. ' a_meeting_notes')
+end
+
+nmap_leader('oz', '<Cmd>lua MiniMisc.zoom()<CR>',        'Zoom toggle')
+-- nmap_leader('on', '<cmd>Obsidian new_from_template<cr>', 'New note')
+nmap_leader('on', meeting_note,                          'New note')
 nmap_leader('os', '<cmd>Obsidian search<cr>',            'Search notes')
 nmap_leader('or', '<cmd>Obsidian rename<cr>',            'Rename note')
 nmap_leader('ot', '<cmd>Obsidian tags<cr>',              'Search tags')
