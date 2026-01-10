@@ -85,6 +85,12 @@ now(function()
       folder = 'templates',
       date_format = '%Y-%m-%d-%a',
       time_format = '%H:%M',
+      -- -- potential future config if obsidian ever allows per-directory config
+      -- customizations = {
+      --   ["b_project"] = {
+      --     dir = "a-proj"
+      --   }
+      -- }
     },
     follow_url_func = function(url)
       -- Open the URL in the default web browser.
