@@ -40,3 +40,9 @@ vim.b.minisurround_config = {
     },
   },
 }
+
+vim.cmd [[
+au BufEnter * syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")\ze\_W" keepend contained conceal contains=markdownUrl concealends
+au BufEnter * hi link tkLink markdownLinkText
+]]
+
