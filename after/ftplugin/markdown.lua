@@ -41,6 +41,9 @@ vim.b.minisurround_config = {
   },
 }
 
+local action = '<BS><BS><Esc>[s1z=gi<Right>'
+require('mini.keymap').map_combo('i', 'kk', action)
+
 vim.cmd [[
 au BufEnter * syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")\ze\_W" keepend contained conceal contains=markdownUrl concealends
 au BufEnter * hi link tkLink markdownLinkText
