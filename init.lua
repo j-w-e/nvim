@@ -12,6 +12,7 @@
 8. Decide if I want <leader>, or <c-,> to open FTerm
 10. Set up markdown formatting on save, or just trimming trailspace, on save
 11. Write a better mini.pick todo_picker
+12. Set up a plugin to format markdown / comment bullets
 ]]
 --
 -- Bootstrap 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
