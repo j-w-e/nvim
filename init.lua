@@ -8,10 +8,11 @@
 --[[ TODO list
 2. Find out why R.nvim doesn't respect <bs> as a localleader.
 3. Remap U and <c-r> to undo.
-5. Set up the 'core' label for key notes eg team.
 8. Decide if I want <leader>, or <c-,> to open FTerm
 10. Set up markdown formatting on save, or just trimming trailspace, on save
 11. Write a better mini.pick todo_picker
+12. Work out why <tab> isn't moving between snippet locations
+    12a. Possibly because blink is setting the mapping for tab, rather than mini.snippets?
 ]]
 --
 -- Bootstrap 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
