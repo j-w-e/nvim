@@ -60,7 +60,7 @@ vim.b.minisurround_config = {
   },
 }
 
-vim.keymap.set('n', 'gss', 'gsairs', { buffer = 0, desc = 'strikeout current line', remap = true })
+vim.keymap.set('n', 'ss', 'sairs', { buffer = 0, desc = 'strikeout current line', remap = true })
 
 local action = '<BS><BS><Esc>[s1z=gi<Right>'
 require('mini.keymap').map_combo('i', 'kk', action)
