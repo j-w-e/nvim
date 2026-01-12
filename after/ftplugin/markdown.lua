@@ -24,9 +24,28 @@ vim.cmd('setlocal foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()')
 -- Disable built-in `gO` mapping in favor of 'mini.basics'
 vim.keymap.del('n', 'gO', { buffer = 0 })
 
+-- Set indent scope to only contain top border
+vim.b.miniindentscope_config = { options = { border = 'top' } }
+
+-- Treat numbers as negative only if preceded by a whitespace
+-- So that dates (2026-01-12) does not get counted as negative
+vim.opt_local.nrformats = 'blank'
+
 -- Set markdown-specific surrounding in 'mini.surround'
 vim.b.minisurround_config = {
   custom_surroundings = {
+    s = {
+      input = { '%~%~().-()%~%~' },
+      output = { left = '~~', right = '~~' },
+    },
+    i = {
+      input = { '%*().-()%*' },
+      output = { left = '*', right = '*' },
+    },
+    b = {
+      input = { '%*%*().-()%*%*' },
+      output = { left = '**', right = '**' },
+    },
     -- Markdown link. Common usage:
     -- `saiwL` + [type/paste link] + <CR> - add link
     -- `sdL` - delete link
@@ -40,6 +59,8 @@ vim.b.minisurround_config = {
     },
   },
 }
+
+vim.keymap.set('n', 'gss', 'gsairs', { buffer = 0, desc = 'strikeout current line', remap = true })
 
 local action = '<BS><BS><Esc>[s1z=gi<Right>'
 require('mini.keymap').map_combo('i', 'kk', action)
