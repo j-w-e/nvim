@@ -309,3 +309,37 @@ end, { desc = 'insjump' })
 -- Escape into Normal mode from Terminal mode
 require('mini.keymap').map_combo('t', 'jk', '<BS><BS><C-\\><C-n>')
 require('mini.keymap').map_combo('t', 'kj', '<BS><BS><C-\\><C-n>')
+
+-- -- Helper functions from chatgpt to export markdown to html, so that I can copy and paste notes
+-- local function pandoc_to_clipboard(input)
+--   local cmd = "pandoc -f markdown -t html | pbcopy"
+--   local handle = io.popen(cmd, "w")
+--   if not handle then
+--     vim.notify("Failed to run pandoc", vim.log.levels.ERROR)
+--     return
+--   end
+--   handle:write(input)
+--   handle:close()
+--   vim.notify("Copied HTML to clipboard", vim.log.levels.INFO)
+-- end
+--
+-- vim.keymap.set("n", "<leader>ox", function()
+--   local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+--   pandoc_to_clipboard(table.concat(lines, "\n"))
+-- end, { desc = "Pandoc: buffer → HTML → clipboard" })
+--
+-- vim.keymap.set("v", "<leader>ox", function()
+--   local _, ls, cs = unpack(vim.fn.getpos("'<"))
+--   local _, le, ce = unpack(vim.fn.getpos("'>"))
+--
+--   local lines = vim.api.nvim_buf_get_lines(0, ls - 1, le, false)
+--
+--   if #lines == 0 then return end
+--
+--   lines[1] = string.sub(lines[1], cs)
+--   lines[#lines] = string.sub(lines[#lines], 1, ce)
+--
+--   pandoc_to_clipboard(table.concat(lines, "\n"))
+-- end, { desc = "Pandoc: selection → HTML → clipboard" })
+--
+--
