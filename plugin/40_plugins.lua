@@ -80,11 +80,16 @@ later(function()
     -- Map of filetype to formatters
     formatters_by_ft = {
       lua = { 'stylua' },
+      ['*'] = { 'trim_whitespace' },
     },
     formatters = {
       stylua = {
         prepend_args = { '--indent-type', 'Spaces', '--indent-width', '2', '--quote-style', 'AutoPreferSingle' },
       },
+    },
+    format_on_save = {
+      lsp_format = 'fallback',
+      timeout_ms = 500,
     },
   })
 end)
