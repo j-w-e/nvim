@@ -63,7 +63,7 @@ vim.b.minisurround_config = {
 vim.keymap.set('n', 'ss', 'sairs', { buffer = 0, desc = 'strikeout current line', remap = true })
 
 -- set keymap to fix last spelling mistake. And insert an undo breakpoint right before changing spelling
-local action = '<BS><BS><Esc>[s1z=gi<Right>'
+local action = '<BS><BS><Esc>[s1z=gi'
 require('mini.keymap').map_combo('i', 'kk', action)
 
 vim.cmd [[
