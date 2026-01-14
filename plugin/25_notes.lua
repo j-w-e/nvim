@@ -8,7 +8,16 @@ now(function()
     source = 'saghen/blink.cmp',
     checkout = 'b19413d214068f316c78978b08264ed1c41830ec',
   })
-  require('blink.cmp').setup()
+  require('blink.cmp').setup({
+    sources = {
+      providers = {
+        buffer = {
+          score_offset = -100,
+          min_keyword_length = 4,
+        }
+      }
+    }
+  })
 end)
 
 now(function()
