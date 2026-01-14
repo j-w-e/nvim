@@ -270,6 +270,8 @@ later(function()
       -- - Stop submode either by `<Esc>` or by any key that is not in submode.
       miniclue.gen_clues.windows({ submode_resize = true }),
       miniclue.gen_clues.z(),
+      { mode = 'n', keys = ']b', postkeys = ']' },
+      { mode = 'n', keys = '[b', postkeys = '[' },
     },
     -- Explicitly opt-in for set of common keys to trigger clue window
     triggers = {
