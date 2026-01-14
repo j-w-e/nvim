@@ -28,7 +28,7 @@ local function replace_markdown_bullets()
   local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
 
   local bullets = { "-", "*", "+" }
-  local indent_width = 4
+  local indent_width = vim.bo[bufnr].shiftwidth
 
   -- capture: indentation, bullet, space(s), content
   local pattern = "^(%s*)([%*%-%+])(%s+)(.*)$"
