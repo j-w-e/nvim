@@ -10,8 +10,6 @@
 3. Remap U and <c-r> to undo.
 8. Decide if I want <leader>, or <c-,> to open FTerm
 11. Write a better mini.pick todo_picker
-12. Work out why <tab> isn't moving between snippet locations
-    12a. Possibly because blink is setting the mapping for tab, rather than mini.snippets?
 13. Set up a plugin to format markdown / comment bullets
 14. Set up a keymap to find TODOs in the current file, sorted by line number. This should be possible with https://nvim-mini.org/mini.nvim/doc/mini-extra.html#miniextra.pickers.buf_lines
 ]]
