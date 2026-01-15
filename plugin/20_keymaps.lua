@@ -260,8 +260,8 @@ local function smart_line_start()
   --   + item
   --   1. item
   --   1) item
-  local bullet_start, bullet_end = line:find("^%s*([%-%*%+]%s+)")
-  local number_start, number_end = line:find("^%s*(%d+[%.%)]+%s+)")
+  local bullet_start, bullet_end = line:find('^%s*([%-%*%+]%s+)')
+  local number_start, number_end = line:find('^%s*(%d+[%.%)]+%s+)')
 
   local list_end = bullet_end or number_end
 
@@ -275,7 +275,7 @@ local function smart_line_start()
   end
 
   -- 2. Normal smart line start behavior
-  local first_non_ws = line:find("%S")
+  local first_non_ws = line:find('%S')
   first_non_ws = first_non_ws and (first_non_ws - 1) or 0
 
   if col == first_non_ws then
@@ -284,7 +284,7 @@ local function smart_line_start()
     vim.api.nvim_win_set_cursor(0, { row, first_non_ws })
   end
 end
-vim.keymap.set({ 'n', 'x' }, 'gh', smart_line_start, { desc = "Start of line" })
+vim.keymap.set({ 'n', 'x' }, 'gh', smart_line_start, { desc = 'Start of line' })
 
 -- vim.keymap.set(
 --   { 'n', 'x' },
@@ -304,6 +304,9 @@ vim.keymap.set('i', '<c-l>', function()
     pcall(vim.api.nvim_win_set_cursor, 0, { row + 1, col })
   end
 end, { desc = 'insjump' })
+
+-- Use U to act as redo, or <c-r>, using MiniBracketed
+nmap('U', '<c-r><cmd>lua MiniBracketed.register_undo_state()<cr>')
 
 -- From helpfile for mini.keymap
 -- Escape into Normal mode from Terminal mode
