@@ -8,9 +8,7 @@
 --[[ TODO list
 2. Find out why R.nvim doesn't respect <bs> as a localleader.
 8. Decide if I want <leader>, or <c-,> to open FTerm
-11. Write a better mini.pick todo_picker
 12. Set up a plugin to format markdown / comment bullets
-13. Set up a keymap to find TODOs in the current file, sorted by line number. This should be possible with https://nvim-mini.org/mini.nvim/doc/mini-extra.html#miniextra.pickers.buf_lines
 ]]
 --
 -- Bootstrap 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
