@@ -66,8 +66,7 @@ vim.keymap.set('n', 'ss', 'sairs', { buffer = 0, desc = 'strikeout current line'
 local action = '<BS><BS><Esc>[s1z=gi'
 require('mini.keymap').map_combo('i', 'kk', action)
 
-vim.cmd [[
+vim.cmd([[
 au BufEnter * syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")\ze\_W" keepend contained conceal contains=markdownUrl concealends
 au BufEnter * hi link tkLink markdownLinkText
-]]
-
+]])
