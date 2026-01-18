@@ -311,7 +311,9 @@ later(function()
       pattern = [[.*<(KEYWORDS)\s*]], -- pattern or table of patterns, used for highlighting (vim regex)
       comments_only = false, -- uses treesitter to match keywords in comments only
     },
-    pattern = [[\b(KEYWORDS)\b]], -- match without the extra colon. You'll likely get false positives
+    search = {
+      pattern = [[\b(KEYWORDS)\b]], -- match without the extra colon. You'll likely get false positives
+    },
   })
 end)
 

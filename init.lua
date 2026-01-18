@@ -6,6 +6,7 @@
 -- using NVIM-APPNAME=blink, I run nvim with a specific config depending on whether I am using obsidian or not.
 
 --[[ TODO list
+1. Again try to implement a todo picker for the currrent file
 2. Find out why R.nvim doesn't respect <bs> as a localleader.
 8. Decide if I want <leader>, or <c-,> to open FTerm
 12. Set up a plugin to format markdown / comment bullets

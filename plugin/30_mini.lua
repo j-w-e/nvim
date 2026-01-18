@@ -659,6 +659,69 @@ later(function()
     end
     return MiniPick.registry[chosen_picker_name]()
   end
+
+  -- TODO picker, from https://github.com/nvim-mini/mini.nvim/discussions/1427
+  -- this version copied from https://github.com/diego-velez/nvim/blob/62ba256eee8be84f0a4b2c48e1b534c9f8e608d3/lua/plugins/mini_pick.lua#L188
+  local ns_digit_prefix = vim.api.nvim_create_namespace('cur-buf-pick-show')
+  local show_todo = function(buf_id, entries, query, opts)
+    MiniPick.default_show(buf_id, entries, query, opts)
+
+    -- Add highlighting to every line in the buffer
+    for line, entry in ipairs(entries) do
+      for _, hl in ipairs(entry.hl) do
+        local start = { line - 1, hl[1][1] }
+        local finish = { line - 1, hl[1][2] }
+        vim.hl.range(buf_id, ns_digit_prefix, hl[2], start, finish, { priority = vim.hl.priorities.user + 1 })
+      end
+    end
+  end
+
+  MiniPick.registry.todo = function()
+    require('todo-comments.search').search(function(results)
+      -- Don't do anything if there are no todos in the project
+      if #results == 0 then
+        return
+      end
+
+      local Config = require('todo-comments.config')
+      local Highlight = require('todo-comments.highlight')
+
+      for i, entry in ipairs(results) do
+        -- By default, mini.pick uses the path item when an item is choosen to open it
+        entry.path = entry.filename
+        entry.filename = nil
+
+        local relative_path = string.gsub(entry.path, vim.fn.getcwd() .. '/', '')
+        local display = string.format('%s:%s:%s ', relative_path, entry.lnum, entry.col)
+        local text = entry.text
+        local start, finish, kw = Highlight.match(text)
+
+        entry.hl = {}
+
+        if start then
+          kw = Config.keywords[kw] or kw
+          local icon = Config.options.keywords[kw].icon or ' '
+          display = icon .. display
+          table.insert(entry.hl, { { 0, #icon }, 'TodoFg' .. kw })
+          text = vim.trim(text:sub(start))
+
+          table.insert(entry.hl, {
+            { #display + 1, #display + finish - start + 1 },
+            'TodoBg' .. kw,
+          })
+          table.insert(entry.hl, {
+            { #display + finish - start + 1, #display + finish + 1 + #text },
+            'TodoFg' .. kw,
+          })
+          entry.text = display .. ' ' .. text
+        end
+
+        results[i] = entry
+      end
+
+      MiniPick.start({ source = { name = 'Find todo', show = show_todo, items = results } })
+    end)
+  end
 end)
 
 -- Manage and expand snippets.
