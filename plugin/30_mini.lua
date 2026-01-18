@@ -701,19 +701,19 @@ later(function()
         if start then
           kw = Config.keywords[kw] or kw
           local icon = Config.options.keywords[kw].icon or ' '
-          display = icon .. display
+          -- display = icon .. display
           table.insert(entry.hl, { { 0, #icon }, 'TodoFg' .. kw })
           text = vim.trim(text:sub(start))
 
           table.insert(entry.hl, {
-            { #display + 1, #display + finish - start + 1 },
-            'TodoBg' .. kw,
-          })
-          table.insert(entry.hl, {
-            { #display + finish - start + 1, #display + finish + 1 + #text },
+            { start + 7, #text + 4 },
             'TodoFg' .. kw,
           })
-          entry.text = display .. ' ' .. text
+          -- table.insert(entry.hl, {
+          --   { #text + 5, #text + 7 },
+          --   'TodoBg' .. kw,
+          -- })
+          entry.text = icon .. ' ' .. text .. ' -> ' .. display
         end
 
         results[i] = entry
