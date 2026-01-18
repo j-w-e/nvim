@@ -701,6 +701,12 @@ later(function()
         entry.filename = nil
 
         local relative_path = string.gsub(entry.path, vim.fn.getcwd() .. '/', '')
+        -- Hideous HACK to cover the fact that my notes folder has a hyphen in the title
+        local relative_path = string.gsub(
+          relative_path,
+          '/Users/hughearp/Library/CloudStorage/OneDrive%-NorwegianRefugeeCouncil/notes/',
+          ''
+        )
         local display = string.format('%s:%s:%s ', relative_path, entry.lnum, entry.col)
         local text = entry.text
         local start, finish, kw = Highlight.match(text)
