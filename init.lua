@@ -9,7 +9,6 @@
 1. Again try to implement a todo picker for the currrent file
 2. Find out why R.nvim doesn't respect <bs> as a localleader.
 8. Decide if I want <leader>, or <c-,> to open FTerm
-12. Set up a plugin to format markdown / comment bullets
 ]]
 --
 -- Bootstrap 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
