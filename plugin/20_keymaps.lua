@@ -86,7 +86,7 @@ nmap_leader('eq', explore_quickfix,                         'Quickfix')
 local pick_added_hunks_buf = '<Cmd>Pick git_hunks path="%" scope="staged"<CR>'
 local pick_workspace_symbols_live = '<Cmd>Pick lsp scope="workspace_symbol_live"<CR>'
 local todo_picker = '<cmd>Pick todo<cr>'
-local todo_picker_cur_file = '<Cmd>Pick buf_lines scope="current"<CR>TODO<c-space>'
+local todo_picker_cur_file = '<Cmd>lua MiniExtra.pickers.buf_lines({ scope = "current", preserve_order = true }, { source = { name = "Find todos (buf) - < c-space > to refine" } } )<CR>TODO'
 
 nmap_leader('f/', '<Cmd>Pick history scope="/"<CR>',            '"/" history')
 nmap_leader('f:', '<Cmd>Pick history scope=":"<CR>',            '":" history')
