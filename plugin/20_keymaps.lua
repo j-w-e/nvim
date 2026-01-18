@@ -312,8 +312,8 @@ nmap('U', '<c-r><cmd>lua MiniBracketed.register_undo_state()<cr>')
 
 -- From helpfile for mini.keymap
 -- Escape into Normal mode from Terminal mode
-require('mini.keymap').map_combo('t', 'jk', '<BS><BS><C-\\><C-n>')
-require('mini.keymap').map_combo('t', 'kj', '<BS><BS><C-\\><C-n>')
+-- require('mini.keymap').map_combo('t', 'jk', '<BS><BS><C-\\><C-n>')
+-- require('mini.keymap').map_combo('t', 'kj', '<BS><BS><C-\\><C-n>')
 
 -- -- Helper functions from chatgpt to export markdown to html, so that I can copy and paste notes
 -- local function pandoc_to_clipboard(input)

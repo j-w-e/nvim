@@ -16,6 +16,7 @@ now(function()
     -- Manage options in 'plugin/10_options.lua' for didactic purposes
     options = { basic = false },
     mappings = {
+      option_toggle_prefix = '<leader>vt',
       -- Create `<C-hjkl>` mappings for window navigation
       windows = true,
       -- Create `<M-hjkl>` mappings for navigation in Insert and Command modes
@@ -283,6 +284,7 @@ later(function()
     -- Explicitly opt-in for set of common keys to trigger clue window
     triggers = {
       { mode = { 'n', 'x' }, keys = '<Leader>' }, -- Leader triggers
+      { mode = { 'n', 'x' }, keys = '<localleader>' }, -- Leader triggers
       { mode = 'n', keys = '\\' },                -- mini.basics
       { mode = { 'n', 'x' }, keys = '[' },        -- mini.bracketed
       { mode = { 'n', 'x' }, keys = ']' },
@@ -565,24 +567,24 @@ end)
 -- Spots are computed by a configurable spotter function.
 -- later(function() require('mini.jump2d').setup() end)
 
--- Special key mappings. Provides helpers to map:
--- - Multi-step actions. Apply action 1 if condition is met; else apply
---   action 2 if condition is met; etc.
--- - Combos. Sequence of keys where each acts immediately plus execute extra
---   action if all are typed fast enough. Useful for Insert mode mappings to not
---   introduce delay when typing mapping keys without intention to execute action.
-later(function()
-  require('mini.keymap').setup()
-  -- Navigate 'mini.completion' menu with `<Tab>` /  `<S-Tab>`
-  MiniKeymap.map_multistep('i', '<Tab>', { 'pmenu_next' })
-  MiniKeymap.map_multistep('i', '<S-Tab>', { 'pmenu_prev' })
-  -- On `<CR>` try to accept current completion item, fall back to accounting
-  -- for pairs from 'mini.pairs'
-  -- MiniKeymap.map_multistep('i', '<CR>', { 'pmenu_accept', 'minipairs_cr' })
-  -- On `<BS>` just try to account for pairs from 'mini.pairs'
-  MiniKeymap.map_multistep('i', '<BS>', { 'minipairs_bs' })
-end)
-
+-- -- Special key mappings. Provides helpers to map:
+-- -- - Multi-step actions. Apply action 1 if condition is met; else apply
+-- --   action 2 if condition is met; etc.
+-- -- - Combos. Sequence of keys where each acts immediately plus execute extra
+-- --   action if all are typed fast enough. Useful for Insert mode mappings to not
+-- --   introduce delay when typing mapping keys without intention to execute action.
+-- later(function()
+--   require('mini.keymap').setup()
+--   -- Navigate 'mini.completion' menu with `<Tab>` /  `<S-Tab>`
+--   MiniKeymap.map_multistep('i', '<Tab>', { 'pmenu_next' })
+--   MiniKeymap.map_multistep('i', '<S-Tab>', { 'pmenu_prev' })
+--   -- On `<CR>` try to accept current completion item, fall back to accounting
+--   -- for pairs from 'mini.pairs'
+--   -- MiniKeymap.map_multistep('i', '<CR>', { 'pmenu_accept', 'minipairs_cr' })
+--   -- On `<BS>` just try to account for pairs from 'mini.pairs'
+--   -- MiniKeymap.map_multistep('i', '<BS>', { 'minipairs_bs' })
+-- end)
+--
 -- Move any selection in any direction.
 later(function()
   require('mini.move').setup({

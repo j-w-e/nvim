@@ -2,7 +2,9 @@
 
 -- General ====================================================================
 vim.g.mapleader      = ' '    -- Use `<Space>` as <Leader> key
-vim.g.maplocalleader = '<bs>' -- Use `<bs>` as <localleader> key, mostly for R
+-- For some reason <bs> doesn't work as local leader, so resorting to \
+vim.g.maplocalleader = '\\'   -- Use `<bs>` as <localleader> key, mostly for R
+-- vim.g.maplocalleader = '<bs>' -- Use `<bs>` as <localleader> key, mostly for R
 
 vim.o.mouse       = 'a'            -- Enable mouse
 vim.o.mousescroll = 'ver:10,hor:6' -- Customize mouse scroll

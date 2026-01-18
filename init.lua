@@ -8,6 +8,7 @@
 --[[ TODO list
 1. Again try to implement a todo picker for the currrent file
 2. Find out why R.nvim doesn't respect <bs> as a localleader.
+3. Check all localleader mappings, and which ones work and which don't
 8. Decide if I want <leader>, or <c-,> to open FTerm
 ]]
 --
