@@ -440,3 +440,20 @@ require('mini.keymap').map_combo('t', 'kj', '<BS><BS><C-\\><C-n>')
 -- end, { desc = "Pandoc: selection → HTML → clipboard" })
 --
 --
+
+-- navigating TODO comments
+vim.keymap.set('n', ']t', function()
+  require('todo-comments').jump_next()
+end, { desc = 'Next todo comment' })
+
+vim.keymap.set('n', '[t', function()
+  require('todo-comments').jump_prev()
+end, { desc = 'Previous todo comment' })
+
+vim.keymap.set('n', ']T', function()
+  require('todo-comments').jump_prev()
+end, { desc = 'Prev todo comment' })
+
+vim.keymap.set('n', '[T', function()
+  require('todo-comments').jump_next()
+end, { desc = 'Next todo comment' })

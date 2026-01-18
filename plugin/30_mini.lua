@@ -235,9 +235,10 @@ end)
 
 -- Go forward/backward with square brackets. Implements consistent sets of mappings
 -- for selected targets (like buffers, diagnostic, quickfix list entries, etc.).
--- TODO remap U to be <c-r>, and to update MiniBracketed.register_undo_state
 later(function()
-  require('mini.bracketed').setup()
+  require('mini.bracketed').setup({
+    treesitter = { suffix = 'r', options = {} },
+  })
 end)
 
 -- Remove buffers. Opened files occupy space in tabline and buffer picker.
@@ -270,8 +271,14 @@ later(function()
       -- - Stop submode either by `<Esc>` or by any key that is not in submode.
       miniclue.gen_clues.windows({ submode_resize = true }),
       miniclue.gen_clues.z(),
+      -- submodes for buffer navigation
       { mode = 'n', keys = ']b', postkeys = ']' },
       { mode = 'n', keys = '[b', postkeys = '[' },
+      -- submodes for finding TODO notes
+      { mode = 'n', keys = '[t', postkeys = '[' },
+      { mode = 'n', keys = '[T', postkeys = '[' },
+      { mode = 'n', keys = ']t', postkeys = ']' },
+      { mode = 'n', keys = ']T', postkeys = ']' },
     },
     -- Explicitly opt-in for set of common keys to trigger clue window
     triggers = {
@@ -473,34 +480,34 @@ later(function()
   end
 
   -- Keymap to set focused directory as current working directory
-local set_cwd = function()
-  local path = (MiniFiles.get_fs_entry() or {}).path
-  if path == nil then
-    return vim.notify("Cursor is not on valid entry")
+  local set_cwd = function()
+    local path = (MiniFiles.get_fs_entry() or {}).path
+    if path == nil then
+      return vim.notify('Cursor is not on valid entry')
+    end
+    vim.fn.chdir(vim.fs.dirname(path))
   end
-  vim.fn.chdir(vim.fs.dirname(path))
-end
 
--- Keymap to yank in register full path of entry under cursor
-local yank_path = function()
-  local path = (MiniFiles.get_fs_entry() or {}).path
-  if path == nil then
-    return vim.notify("Cursor is not on valid entry")
+  -- Keymap to yank in register full path of entry under cursor
+  local yank_path = function()
+    local path = (MiniFiles.get_fs_entry() or {}).path
+    if path == nil then
+      return vim.notify('Cursor is not on valid entry')
+    end
+    vim.fn.setreg(vim.v.register, path)
   end
-  vim.fn.setreg(vim.v.register, path)
-end
 
--- Keymap to open path with system default handler (useful for non-text files)
-local ui_open = function()
-  vim.ui.open(MiniFiles.get_fs_entry().path)
-end
+  -- Keymap to open path with system default handler (useful for non-text files)
+  local ui_open = function()
+    vim.ui.open(MiniFiles.get_fs_entry().path)
+  end
 
   _G.Config.new_autocmd('User', 'MiniFilesExplorerOpen', add_marks, 'Add bookmarks')
   _G.Config.new_autocmd('User', 'MiniFilesBufferCreate', function(args)
     local b = args.data.buf_id
-    vim.keymap.set("n", "g~", set_cwd, { buffer = b, desc = "Set cwd" })
-    vim.keymap.set("n", "gX", ui_open, { buffer = b, desc = "OS open" })
-    vim.keymap.set("n", "gy", yank_path, { buffer = b, desc = "Yank path" })
+    vim.keymap.set('n', 'g~', set_cwd, { buffer = b, desc = 'Set cwd' })
+    vim.keymap.set('n', 'gX', ui_open, { buffer = b, desc = 'OS open' })
+    vim.keymap.set('n', 'gy', yank_path, { buffer = b, desc = 'Yank path' })
   end, 'Add keymaps bookmarks')
   _G.Config.new_autocmd('User', 'MiniFilesWindowUpdate', ensure_center_layout, 'Show MiniFiles centered on screen')
 end)
@@ -645,9 +652,11 @@ later(function()
   MiniPick.registry.registry = function()
     local items = vim.tbl_keys(MiniPick.registry)
     table.sort(items)
-    local source = {items = items, name = 'Registry', choose = function() end}
+    local source = { items = items, name = 'Registry', choose = function() end }
     local chosen_picker_name = MiniPick.start({ source = source })
-    if chosen_picker_name == nil then return end
+    if chosen_picker_name == nil then
+      return
+    end
     return MiniPick.registry[chosen_picker_name]()
   end
 end)
@@ -752,7 +761,6 @@ later(function()
 end)
 
 -- Track and reuse file system visits.
--- TODO set up the 'core' label for many of the key notes files
 later(function()
   require('mini.visits').setup()
 end)

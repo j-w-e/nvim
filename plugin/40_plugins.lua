@@ -291,6 +291,31 @@ later(function()
 end)
 
 later(function()
+  add('folke/todo-comments.nvim')
+  require('todo-comments').setup({
+    signs = true, -- show icons in the signs column
+    sign_priority = 8, -- sign priority
+    -- keywords recognized as todo comments
+    keywords = {
+      TODO = { icon = '', color = 'info' },
+    },
+    merge_keywords = false, -- when true, custom keywords will be merged with the defaults
+    -- highlighting of the line containing the todo comment
+    -- * before: highlights before the keyword (typically comment characters)
+    -- * keyword: highlights of the keyword
+    -- * after: highlights after the keyword (todo text)
+    highlight = {
+      before = '', -- "fg" or "bg" or empty
+      keyword = '', -- "fg", "bg", "wide", "wide_bg", "wide_fg" or empty. (wide and wide_bg is the same as bg, but will also highlight surrounding characters, wide_fg acts accordingly but with fg)
+      after = '', -- "fg" or "bg" or empty
+      pattern = [[.*<(KEYWORDS)\s*]], -- pattern or table of patterns, used for highlighting (vim regex)
+      comments_only = false, -- uses treesitter to match keywords in comments only
+    },
+    pattern = [[\b(KEYWORDS)\b]], -- match without the extra colon. You'll likely get false positives
+  })
+end)
+
+later(function()
   add({ source = 'chrishrb/gx.nvim', depends = { 'nvim-lua/plenary.nvim' } })
   require('gx').setup({
     select_prompt = false,
