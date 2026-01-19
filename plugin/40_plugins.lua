@@ -263,13 +263,13 @@ later(function()
 end)
 
 later(function()
-  add('nguyenvukhang/nvim-toggler')
-  require('nvim-toggler').setup({
-    inverses = { ['TRUE'] = 'FALSE' },
-    -- remove_default_keybinds = true,
+  add('nat-418/boole.nvim')
+  require('boole').setup({
+    mappings = {
+      increment = '<C-a>',
+      decrement = '<C-x>',
+    },
   })
-  MiniClue.set_mapping_desc('n', '<leader>i', 'Invert')
-  MiniClue.set_mapping_desc('x', '<leader>i', 'Invert')
 end)
 
 later(function()
