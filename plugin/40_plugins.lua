@@ -330,16 +330,10 @@ end)
 later(function()
   add('gaodean/autolist.nvim')
   local list_patterns = {
-    neorg_1 = '%-',
-    neorg_2 = '%-%-',
-    neorg_3 = '%-%-%-',
-    neorg_4 = '%-%-%-%-',
-    neorg_5 = '%-%-%-%-%-',
     unordered = '[-+*]', -- - + *
     digit = '%d+[.)]', -- 1. 2. 3.
     ascii = '%a[.)]', -- a) b) c)
     roman = '%u*[.)]', -- I. II. III.
-    latex_item = '\\item',
   }
   require('autolist').setup({
     enabled = true,
@@ -370,10 +364,13 @@ later(function()
         list_patterns.roman,
       },
     },
-    checkbox = {
-      left = '%[', -- the left checkbox delimiter (you could change to "%(" for brackets)
-      right = '%]', -- the right checkbox delim (same customisation as above)
-      fill = 'x', -- if you do the above two customisations, your checkbox could be (x) instead of [x]
-    },
+  })
+end)
+
+later(function()
+  add('rlychrisg/keepcursor.nvim')
+  require('keepcursor').setup({
+    enabled_on_start_v = 'top', -- options are "top", "middle" and "bottom".
+    enabled_on_start_h = 'none', -- options are "left" and "right".
   })
 end)

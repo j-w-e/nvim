@@ -232,7 +232,13 @@ end)
 -- Animate common Neovim actions. Like cursor movement, scroll, window resize,
 -- window open, window close. Animations are done based on Neovim events and
 -- don't require custom mappings.
--- later(function() require('mini.animate').setup() end)
+later(function()
+  require('mini.animate').setup({
+    scroll = {
+      enable = false,
+    },
+  })
+end)
 
 -- Go forward/backward with square brackets. Implements consistent sets of mappings
 -- for selected targets (like buffers, diagnostic, quickfix list entries, etc.).
