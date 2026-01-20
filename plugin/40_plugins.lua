@@ -367,10 +367,29 @@ later(function()
   })
 end)
 
-later(function()
-  add('rlychrisg/keepcursor.nvim')
-  require('keepcursor').setup({
-    enabled_on_start_v = 'top', -- options are "top", "middle" and "bottom".
-    enabled_on_start_h = 'none', -- options are "left" and "right".
-  })
-end)
+-- later(function()
+--   add('rlychrisg/keepcursor.nvim')
+--   require('keepcursor').setup({
+--     enabled_on_start_v = 'top', -- options are "top", "middle" and "bottom".
+--     enabled_on_start_h = 'none', -- options are "left" and "right".
+--   })
+-- end)
+-- --
+-- -- later(function()
+-- --   add('mawkler/demicolon.nvim')
+-- --   require('demicolon').setup({
+-- --     keymaps = {
+-- --       repeat_motions = false, -- Don't create ; and , keymaps
+-- --     },
+-- --   })
+-- --
+-- --   local map, nxo = vim.keymap.set, { 'n', 'x', 'o' }
+-- --
+-- --   -- Stateless: always forward/backward
+-- --   -- map(nxo, 'n', require('demicolon.repeat_jump').forward)
+-- --   -- map(nxo, 'N', require('demicolon.repeat_jump').backward)
+-- --
+-- --   -- Or, stateful (remember the original motion’s direction)
+-- --   map(nxo, ',', require('demicolon.repeat_jump').next)
+-- --   map(nxo, ';', require('demicolon.repeat_jump').prev)
+-- -- end)
