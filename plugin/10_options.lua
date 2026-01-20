@@ -34,10 +34,12 @@ vim.o.scrolloff      = 15         -- KeepCursor.nvim handles scrolloff well
 vim.o.showmode       = false      -- Don't show mode in command line
 vim.o.signcolumn     = 'yes'      -- Always show signcolumn (less flicker)
 vim.o.splitbelow     = true       -- Horizontal splits will be below
-vim.o.splitkeep      = 'screen'   -- Reduce scroll during window split
+vim.o.splitkeep      = 'cursor'   -- Keep cursor in correct place when splitting screen
 vim.o.splitright     = true       -- Vertical splits will be to the right
+vim.o.startofline    = true       -- Go to start of line when performing jump
 vim.o.winborder      = 'single'   -- Use border in floating windows
 vim.o.wrap           = false      -- Don't visually wrap lines (toggle with \w)
+vim.o.whichwrap      = '<>[]'     -- Only left and right arrows move across end of line
 
 vim.o.cursorlineopt  = 'screenline,number' -- Show cursor line per screen line
 
