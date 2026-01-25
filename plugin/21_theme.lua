@@ -6,6 +6,7 @@ now_if_args(function()
   add('folke/tokyonight.nvim')
   require('tokyonight').setup({
     style = 'storm',
+    dim_inactive = true,
     on_highlights = function(highlights, colors)
       highlights.FlashLabel = { bg = colors.blue0, fg = colors.magenta }
       highlights.MiniTrailspace = { fg = colors.magenta }
@@ -16,4 +17,3 @@ now_if_args(function()
   })
   vim.cmd('colorscheme tokyonight')
 end)
-
