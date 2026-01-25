@@ -105,26 +105,6 @@ later(function()
   })
 end)
 
--- Notes ======================================================================
-
-later(function()
-  add('MeanderingProgrammer/render-markdown.nvim')
-
-  require('render-markdown').setup({
-    file_types = { 'markdown', 'Rmd' },
-    code = {
-      render_modes = { 'i' },
-      style = 'full',
-      border = 'thick',
-    },
-    html = {
-      comment = {
-        conceal = false,
-      },
-    },
-  })
-end)
-
 -- R ==========================================================================
 
 now_if_args(function()
