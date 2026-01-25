@@ -404,3 +404,8 @@ end)
 -- --   map(nxo, ',', require('demicolon.repeat_jump').next)
 -- --   map(nxo, ';', require('demicolon.repeat_jump').prev)
 -- -- end)
+
+-- later(function()
+--     add('hat0uma/csvview.nvim')
+--     require('csvview').setup()
+-- end)
