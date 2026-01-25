@@ -123,3 +123,20 @@ now(function()
     end,
   })
 end)
+
+now(function()
+  add('MeanderingProgrammer/render-markdown.nvim')
+  require('render-markdown').setup({
+    file_types = { 'markdown', 'Rmd' },
+    code = {
+      render_modes = { 'i' },
+      style = 'full',
+      border = 'thick',
+    },
+    html = {
+      comment = {
+        conceal = false,
+      },
+    },
+  })
+end)
