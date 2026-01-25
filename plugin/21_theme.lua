@@ -1,8 +1,8 @@
 -- Make concise helpers for installing/adding plugins in two stages
-local add, later = MiniDeps.add, MiniDeps.later
+local add, later, now = MiniDeps.add, MiniDeps.later, MiniDeps.now
 local now_if_args = _G.Config.now_if_args
 
-now_if_args(function()
+now(function()
   add('folke/tokyonight.nvim')
   require('tokyonight').setup({
     style = 'storm',

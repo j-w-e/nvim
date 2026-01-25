@@ -370,3 +370,7 @@ end, { desc = 'Prev todo comment' })
 vim.keymap.set('n', '[T', function()
   require('todo-comments').jump_next()
 end, { desc = 'Next todo comment' })
+
+-- set keymap to fix last spelling mistake. And insert an undo breakpoint right before changing spelling
+local action = '<BS><BS><c-g>u<Esc>[s1z=gi'
+require('mini.keymap').map_combo('i', 'kk', action)
