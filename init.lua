@@ -10,6 +10,7 @@
 2. Find out why R.nvim doesn't respect <bs> as a localleader.
 3. Check all localleader mappings, and which ones work and which don't
 8. Decide if I want <leader>, or <c-,> to open FTerm
+9. Check my markdown bullet formatting function in plugin/50_other_autocmds.lua, to remove the goto statements?
 ]]
 --
 -- Bootstrap 'mini.nvim' manually in a way that it gets managed by 'mini.deps'

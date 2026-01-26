@@ -23,6 +23,8 @@ end, 'Update from disk')
 -- 4 spaces  -> "*"
 -- 8 spaces  -> "+"
 -- repeats every 3 levels
+-- ignores yaml frontmatter
+-- TODO this comes straight from chatgpt. There should be a way to avoid the goto ?
 local function replace_markdown_bullets()
   local bufnr = vim.api.nvim_get_current_buf()
   local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
@@ -33,7 +35,23 @@ local function replace_markdown_bullets()
   -- capture: indentation, bullet, space(s), content
   local pattern = '^(%s*)([%*%-%+])(%s+)(.*)$'
 
+  local in_yaml = false
+
   for i, line in ipairs(lines) do
+    -- Detect YAML front matter
+    if i == 1 and line:match('^%-%-%-$') then
+      in_yaml = true
+      goto continue
+    end
+
+    if in_yaml then
+      if line:match('^%-%-%-$') then
+        in_yaml = false
+      end
+      goto continue
+    end
+
+    -- Normal markdown bullet handling
     local indent, _, space, content = line:match(pattern)
     if indent then
       local spaces = #indent
@@ -42,6 +60,8 @@ local function replace_markdown_bullets()
 
       lines[i] = indent .. bullet .. space .. content
     end
+
+    ::continue::
   end
 
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
