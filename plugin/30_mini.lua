@@ -5,10 +5,9 @@
 local now, later = MiniDeps.now, MiniDeps.later
 local now_if_args = _G.Config.now_if_args
 
+local conf_ver = vim.fn.getenv('NVIM_PROFILE')
+
 -- Step one ===================================================================
--- now(function()
---   vim.cmd('colorscheme miniwinter')
--- end)
 
 -- Common configuration presets.
 now(function()
@@ -60,11 +59,16 @@ end)
 
 -- Session management. A thin wrapper around `:h mksession` that consistently
 -- manages session files.
+local autoread, autowrite = false, false
+if conf_ver == 'notes' then
+  autoread = true
+  autowrite = true
+end
 now(function()
   require('mini.sessions').setup({
-    autowrite = true,
-    autoread = true,
-    directory = '~/.local/share/nvim-blink/session', --<"session" subdir of user data directory from |stdpath()|>,
+    autowrite = autowrite,
+    autoread = autoread,
+    directory = '~/.local/share/nvim/session', --<"session" subdir of user data directory from |stdpath()|>,
     file = 'session.vim',
     force = { read = false, write = true, delete = false },
     verbose = { read = false, write = true, delete = true },

@@ -135,7 +135,7 @@ now_if_args(function()
     },
     pdfviewer = 'open',
     quarto_chunk_hl = {
-      highlight = true,
+      highlight = false,
       virtual_title = true,
       events = '',
     },

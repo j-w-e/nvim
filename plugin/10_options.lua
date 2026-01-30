@@ -110,6 +110,3 @@ local diagnostic_opts = {
 -- Use `later()` to avoid sourcing `vim.diagnostic` on startup
 MiniDeps.later(function() vim.diagnostic.config(diagnostic_opts) end)
 -- stylua: ignore end
-
--- Use default nvim config spellfile
-vim.opt.spellfile = vim.fn.expand("~/.config/nvim/spell/en.utf-8.add")
