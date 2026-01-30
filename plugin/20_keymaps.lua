@@ -165,6 +165,7 @@ nmap_leader('or', '<cmd>Obsidian rename<cr>',            'Rename note')
 nmap_leader('ot', '<cmd>Obsidian tags<cr>',              'Search tags')
 nmap_leader('ob', '<cmd>Obsidian backlinks<cr>',         'Backlinks')
 nmap_leader('of', '<cmd>Obsidian quick_switch<cr>',      'Open note')
+-- TODO do I have to adjust this based on my adjusted session.vim file?
 nmap_leader('oW',
       function()
         MiniSessions.write 'zzz-notes-tmp'

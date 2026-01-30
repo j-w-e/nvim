@@ -62,9 +62,10 @@ end)
 -- manages session files.
 now(function()
   require('mini.sessions').setup({
-    autowrite = false,
-    directory = '~/.local/share/nvim/session', --<"session" subdir of user data directory from |stdpath()|>,
-    file = 'dirSession.vim',
+    autowrite = true,
+    autoread = true,
+    directory = '~/.local/share/nvim-blink/session', --<"session" subdir of user data directory from |stdpath()|>,
+    file = 'session.vim',
     force = { read = false, write = true, delete = false },
     verbose = { read = false, write = true, delete = true },
   })
@@ -342,38 +343,38 @@ later(function()
   })
 end)
 
--- Completion and signature help. Implements async "two stage" autocompletion:
--- - Based on attached LSP servers that support completion.
--- - Fallback (based on built-in keyword completion) if there is no LSP candidates.
-later(function()
-  -- Customize post-processing of LSP responses for a better user experience.
-  -- Don't show 'Text' suggestions (usually noisy) and show snippets last.
-  local process_items_opts = { kind_priority = { Text = -1, Snippet = 99 } }
-  local process_items = function(items, base)
-    return MiniCompletion.default_process_items(items, base, process_items_opts)
-  end
-  require('mini.completion').setup({
-    lsp_completion = {
-      source_func = 'omnifunc',
-      auto_setup = false,
-      process_items = process_items,
-    },
-    window = {
-      info = { border = 'single' },
-      signature = { border = 'single' },
-    },
-  })
-
-  -- Set 'omnifunc' for LSP completion only when needed.
-  local on_attach = function(ev)
-    vim.bo[ev.buf].omnifunc = 'v:lua.MiniCompletion.completefunc_lsp'
-  end
-  _G.Config.new_autocmd('LspAttach', nil, on_attach, "Set 'omnifunc'")
-
-  -- Advertise to servers that Neovim now supports certain set of completion and
-  -- signature features through 'mini.completion'.
-  vim.lsp.config('*', { capabilities = MiniCompletion.get_lsp_capabilities() })
-end)
+-- -- Completion and signature help. Implements async "two stage" autocompletion:
+-- -- - Based on attached LSP servers that support completion.
+-- -- - Fallback (based on built-in keyword completion) if there is no LSP candidates.
+-- later(function()
+--   -- Customize post-processing of LSP responses for a better user experience.
+--   -- Don't show 'Text' suggestions (usually noisy) and show snippets last.
+--   local process_items_opts = { kind_priority = { Text = -1, Snippet = 99 } }
+--   local process_items = function(items, base)
+--     return MiniCompletion.default_process_items(items, base, process_items_opts)
+--   end
+--   require('mini.completion').setup({
+--     lsp_completion = {
+--       source_func = 'omnifunc',
+--       auto_setup = false,
+--       process_items = process_items,
+--     },
+--     window = {
+--       info = { border = 'single' },
+--       signature = { border = 'single' },
+--     },
+--   })
+--
+--   -- Set 'omnifunc' for LSP completion only when needed.
+--   local on_attach = function(ev)
+--     vim.bo[ev.buf].omnifunc = 'v:lua.MiniCompletion.completefunc_lsp'
+--   end
+--   _G.Config.new_autocmd('LspAttach', nil, on_attach, "Set 'omnifunc'")
+--
+--   -- Advertise to servers that Neovim now supports certain set of completion and
+--   -- signature features through 'mini.completion'.
+--   vim.lsp.config('*', { capabilities = MiniCompletion.get_lsp_capabilities() })
+-- end)
 
 -- Autohighlight word under cursor with a customizable delay.
 -- Word boundaries are defined based on `:h 'iskeyword'` option.
@@ -700,6 +701,12 @@ later(function()
         entry.filename = nil
 
         local relative_path = string.gsub(entry.path, vim.fn.getcwd() .. '/', '')
+        -- Hideous HACK to cover the fact that my notes folder has a hyphen in the title
+        local relative_path = string.gsub(
+          relative_path,
+          '/Users/hughearp/Library/CloudStorage/OneDrive%-NorwegianRefugeeCouncil/notes/',
+          ''
+        )
         local display = string.format('%s:%s:%s ', relative_path, entry.lnum, entry.col)
         local text = entry.text
         local start, finish, kw = Highlight.match(text)
