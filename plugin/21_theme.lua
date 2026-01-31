@@ -14,5 +14,11 @@ now(function()
       highlights.RenderMarkdownCode = { bg = colors.bg_dark1 } -- this is a lighter backgroud for code blocks. I got tired of it
     end,
   })
-  vim.cmd('colorscheme tokyonight')
+
+  local conf_ver = vim.fn.getenv('NVIM_PROFILE')
+  if conf_ver == 'notes' then
+    vim.cmd('colorscheme tokyonight-night')
+  else
+    vim.cmd('colorscheme tokyonight')
+  end
 end)

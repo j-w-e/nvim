@@ -349,7 +349,7 @@ later(function()
   })
 end)
 
-if conf_ver == 'notes' then
+if conf_ver ~= 'notes' then
   -- Completion and signature help. Implements async "two stage" autocompletion:
   -- - Based on attached LSP servers that support completion.
   -- - Fallback (based on built-in keyword completion) if there is no LSP candidates.

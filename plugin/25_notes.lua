@@ -2,15 +2,19 @@
 
 -- Make concise helpers for installing/adding plugins in two stages
 local add, later, now = MiniDeps.add, MiniDeps.later, MiniDeps.now
+now(function()
+  add({ source = 'saghen/blink.cmp', checkout = 'v1.8.0' })
+  add('obsidian-nvim/obsidian.nvim')
+end)
 
 local conf_ver = vim.fn.getenv('NVIM_PROFILE')
 
 if conf_ver == 'notes' then
   now(function()
-    add({
-      source = 'saghen/blink.cmp',
-      checkout = 'b19413d214068f316c78978b08264ed1c41830ec',
-    })
+    -- add({
+    --   source = 'saghen/blink.cmp',
+    --   -- checkout = 'b19413d214068f316c78978b08264ed1c41830ec',
+    -- })
     require('blink.cmp').setup({
       keymap = {
         preset = 'none',
@@ -40,10 +44,10 @@ if conf_ver == 'notes' then
   end)
 
   now(function()
-    add({
-      source = 'obsidian-nvim/obsidian.nvim',
-      checkout = 'f513608b6a413d82cb228bba0179a36190b22d21',
-    })
+    -- add({
+    --   source = 'obsidian-nvim/obsidian.nvim',
+    --   -- checkout = 'f513608b6a413d82cb228bba0179a36190b22d21',
+    -- })
     require('obsidian').setup({
       legacy_commands = false,
       ui = { enable = false },
