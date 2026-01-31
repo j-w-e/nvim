@@ -61,7 +61,7 @@ end)
 -- manages session files.
 local autoread, autowrite = false, false
 if conf_ver == 'notes' then
-  autoread = true
+  -- autoread = true
   autowrite = true
 end
 now(function()
@@ -76,22 +76,24 @@ now(function()
 end)
 
 -- Start screen.
-now(function()
-  local ministarter = require('mini.starter')
-  ministarter.setup({
-    evaluate_single = true,
-    items = {
-      ministarter.sections.sessions(6, false),
-      ministarter.sections.recent_files(3, false),
-      ministarter.sections.builtin_actions(),
-    },
-    content_hooks = {
-      ministarter.gen_hook.adding_bullet(),
-      ministarter.gen_hook.indexing(),
-      ministarter.gen_hook.aligning('center', 'center'),
-    },
-  })
-end)
+if conf_ver ~= 'notes' then
+  now(function()
+    local ministarter = require('mini.starter')
+    ministarter.setup({
+      evaluate_single = true,
+      items = {
+        ministarter.sections.sessions(6, false),
+        ministarter.sections.recent_files(3, false),
+        ministarter.sections.builtin_actions(),
+      },
+      content_hooks = {
+        ministarter.gen_hook.adding_bullet(),
+        ministarter.gen_hook.indexing(),
+        ministarter.gen_hook.aligning('center', 'center'),
+      },
+    })
+  end)
+end
 
 -- Statusline.
 now(function()

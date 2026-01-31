@@ -1,3 +1,25 @@
+local conf_ver = vim.fn.getenv('NVIM_PROFILE')
+if conf_ver == 'notes' then
+  vim.api.nvim_create_autocmd('VimEnter', {
+    once = true,
+    callback = function()
+      vim.schedule(function()
+        local notes_dir = vim.fn.expand('~/Library/CloudStorage/OneDrive-NorwegianRefugeeCouncil/notes')
+        local session_name = 'notes'
+        -- Ensure consistent working directory
+        vim.cmd.cd(notes_dir)
+        -- Only read if session exists
+        local session_file = vim.fn.stdpath('data') .. '/session/' .. session_name
+        if vim.fn.filereadable(session_file) == 1 then
+          require('mini.sessions').read(session_name)
+        end
+        vim.o.title = true
+        vim.o.titlestring = 'notes'
+      end)
+    end,
+  })
+end
+
 -- Don't show line numbers in terminals
 -- and enable ctrl + hjkl to navigate windows
 local function set_terminal_keymaps()
