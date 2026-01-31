@@ -40,7 +40,10 @@ if conf_ver == 'notes' then
   end)
 
   now(function()
-    add({ source = 'obsidian-nvim/obsidian.nvim', checkout = 'f513608b6a413d82cb228bba0179a36190b22d21' })
+    add({
+      source = 'obsidian-nvim/obsidian.nvim',
+      checkout = 'f513608b6a413d82cb228bba0179a36190b22d21',
+    })
     require('obsidian').setup({
       legacy_commands = false,
       ui = { enable = false },
