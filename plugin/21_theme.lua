@@ -11,9 +11,18 @@ now(function()
       highlights.FlashLabel = { bg = colors.blue0, fg = colors.magenta }
       highlights.MiniTrailspace = { fg = colors.magenta }
       highlights.CursorLine = { bg = colors.fg_gutter }
-      -- highlights.RenderMarkdownCode = { bg = colors.fg_gutter }  -- this is a lighter backgroud for code blocks. I got tired of it
-      highlights.RenderMarkdownCode = { bg = '#16161e' } -- this is for a dark background to code blocks
+      highlights.RenderMarkdownCode = { bg = colors.bg_dark1 } -- this is a lighter backgroud for code blocks. I got tired of it
     end,
   })
-  vim.cmd('colorscheme tokyonight')
+
+  local conf_ver = vim.fn.getenv('NVIM_PROFILE')
+  if conf_ver == 'notes' then
+    vim.cmd('colorscheme tokyonight-night')
+  else
+    vim.cmd('colorscheme tokyonight')
+  end
+end)
+
+now(function()
+  add('necrogoru/shades-of-purple.nvim')
 end)

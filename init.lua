@@ -1,16 +1,17 @@
 -- j-w-e's nvim config
 -- (Based from MiniMax, and extensively using MINI.nvim)
 
--- This config exists in two branches simultaneously. The main branch uses mini.completion.
--- The 'blink' branch uses blink.cmp, for the moment, in order to have completion for obsidian.nvim.
--- using NVIM-APPNAME=blink, I run nvim with a specific config depending on whether I am using obsidian or not.
+-- This config is dependent on NVIM_PROFILE
+--[[
+      NVIM_PROFILE == 'notes' sets up blink.cmp for completion, and obsidian.nvim for notes
+      Otherwise, mini.completion is used
+--]]
 
 --[[ TODO list
 1. Again try to implement a todo picker for the currrent file
-2. Find out why R.nvim doesn't respect <bs> as a localleader.
-3. Check all localleader mappings, and which ones work and which don't
+2. Adjust the keepcursor autocommand to not operate in MiniFiles?
+3. When in markdown, on a blank line above another blank line above an unordered list, dd removes the list markers
 8. Decide if I want <leader>, or <c-,> to open FTerm
-9. Check my markdown bullet formatting function in plugin/50_other_autocmds.lua, to remove the goto statements?
 ]]
 --
 -- Bootstrap 'mini.nvim' manually in a way that it gets managed by 'mini.deps'

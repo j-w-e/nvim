@@ -5,10 +5,9 @@
 local now, later = MiniDeps.now, MiniDeps.later
 local now_if_args = _G.Config.now_if_args
 
+local conf_ver = vim.fn.getenv('NVIM_PROFILE')
+
 -- Step one ===================================================================
--- now(function()
---   vim.cmd('colorscheme miniwinter')
--- end)
 
 -- Common configuration presets.
 now(function()
@@ -60,33 +59,41 @@ end)
 
 -- Session management. A thin wrapper around `:h mksession` that consistently
 -- manages session files.
+local autoread, autowrite = false, false
+if conf_ver == 'notes' then
+  -- autoread = true
+  autowrite = true
+end
 now(function()
   require('mini.sessions').setup({
-    autowrite = false,
+    autowrite = autowrite,
+    autoread = autoread,
     directory = '~/.local/share/nvim/session', --<"session" subdir of user data directory from |stdpath()|>,
-    file = 'dirSession.vim',
+    file = 'session.vim',
     force = { read = false, write = true, delete = false },
     verbose = { read = false, write = true, delete = true },
   })
 end)
 
 -- Start screen.
-now(function()
-  local ministarter = require('mini.starter')
-  ministarter.setup({
-    evaluate_single = true,
-    items = {
-      ministarter.sections.sessions(6, false),
-      ministarter.sections.recent_files(3, false),
-      ministarter.sections.builtin_actions(),
-    },
-    content_hooks = {
-      ministarter.gen_hook.adding_bullet(),
-      ministarter.gen_hook.indexing(),
-      ministarter.gen_hook.aligning('center', 'center'),
-    },
-  })
-end)
+if conf_ver ~= 'notes' then
+  now(function()
+    local ministarter = require('mini.starter')
+    ministarter.setup({
+      evaluate_single = true,
+      items = {
+        ministarter.sections.sessions(6, false),
+        ministarter.sections.recent_files(3, false),
+        ministarter.sections.builtin_actions(),
+      },
+      content_hooks = {
+        ministarter.gen_hook.adding_bullet(),
+        ministarter.gen_hook.indexing(),
+        ministarter.gen_hook.aligning('center', 'center'),
+      },
+    })
+  end)
+end
 
 -- Statusline.
 now(function()
@@ -342,38 +349,40 @@ later(function()
   })
 end)
 
--- Completion and signature help. Implements async "two stage" autocompletion:
--- - Based on attached LSP servers that support completion.
--- - Fallback (based on built-in keyword completion) if there is no LSP candidates.
-later(function()
-  -- Customize post-processing of LSP responses for a better user experience.
-  -- Don't show 'Text' suggestions (usually noisy) and show snippets last.
-  local process_items_opts = { kind_priority = { Text = -1, Snippet = 99 } }
-  local process_items = function(items, base)
-    return MiniCompletion.default_process_items(items, base, process_items_opts)
-  end
-  require('mini.completion').setup({
-    lsp_completion = {
-      source_func = 'omnifunc',
-      auto_setup = false,
-      process_items = process_items,
-    },
-    window = {
-      info = { border = 'single' },
-      signature = { border = 'single' },
-    },
-  })
+if conf_ver ~= 'notes' then
+  -- Completion and signature help. Implements async "two stage" autocompletion:
+  -- - Based on attached LSP servers that support completion.
+  -- - Fallback (based on built-in keyword completion) if there is no LSP candidates.
+  later(function()
+    -- Customize post-processing of LSP responses for a better user experience.
+    -- Don't show 'Text' suggestions (usually noisy) and show snippets last.
+    local process_items_opts = { kind_priority = { Text = -1, Snippet = 99 } }
+    local process_items = function(items, base)
+      return MiniCompletion.default_process_items(items, base, process_items_opts)
+    end
+    require('mini.completion').setup({
+      lsp_completion = {
+        source_func = 'omnifunc',
+        auto_setup = false,
+        process_items = process_items,
+      },
+      window = {
+        info = { border = 'single' },
+        signature = { border = 'single' },
+      },
+    })
 
-  -- Set 'omnifunc' for LSP completion only when needed.
-  local on_attach = function(ev)
-    vim.bo[ev.buf].omnifunc = 'v:lua.MiniCompletion.completefunc_lsp'
-  end
-  _G.Config.new_autocmd('LspAttach', nil, on_attach, "Set 'omnifunc'")
+    -- Set 'omnifunc' for LSP completion only when needed.
+    local on_attach = function(ev)
+      vim.bo[ev.buf].omnifunc = 'v:lua.MiniCompletion.completefunc_lsp'
+    end
+    _G.Config.new_autocmd('LspAttach', nil, on_attach, "Set 'omnifunc'")
 
-  -- Advertise to servers that Neovim now supports certain set of completion and
-  -- signature features through 'mini.completion'.
-  vim.lsp.config('*', { capabilities = MiniCompletion.get_lsp_capabilities() })
-end)
+    -- Advertise to servers that Neovim now supports certain set of completion and
+    -- signature features through 'mini.completion'.
+    vim.lsp.config('*', { capabilities = MiniCompletion.get_lsp_capabilities() })
+  end)
+end
 
 -- Autohighlight word under cursor with a customizable delay.
 -- Word boundaries are defined based on `:h 'iskeyword'` option.
@@ -579,18 +588,18 @@ end)
 -- -- - Combos. Sequence of keys where each acts immediately plus execute extra
 -- --   action if all are typed fast enough. Useful for Insert mode mappings to not
 -- --   introduce delay when typing mapping keys without intention to execute action.
--- later(function()
---   require('mini.keymap').setup()
---   -- Navigate 'mini.completion' menu with `<Tab>` /  `<S-Tab>`
---   MiniKeymap.map_multistep('i', '<Tab>', { 'pmenu_next' })
---   MiniKeymap.map_multistep('i', '<S-Tab>', { 'pmenu_prev' })
---   -- On `<CR>` try to accept current completion item, fall back to accounting
---   -- for pairs from 'mini.pairs'
---   -- MiniKeymap.map_multistep('i', '<CR>', { 'pmenu_accept', 'minipairs_cr' })
---   -- On `<BS>` just try to account for pairs from 'mini.pairs'
---   -- MiniKeymap.map_multistep('i', '<BS>', { 'minipairs_bs' })
--- end)
---
+later(function()
+  require('mini.keymap').setup()
+  -- Navigate 'mini.completion' menu with `<Tab>` /  `<S-Tab>`
+  MiniKeymap.map_multistep('i', '<Tab>', { 'pmenu_next' })
+  MiniKeymap.map_multistep('i', '<S-Tab>', { 'pmenu_prev' })
+  -- On `<CR>` try to accept current completion item, fall back to accounting
+  -- for pairs from 'mini.pairs'
+  MiniKeymap.map_multistep('i', '<CR>', { 'pmenu_accept', 'minipairs_cr' })
+  -- On `<BS>` just try to account for pairs from 'mini.pairs'
+  MiniKeymap.map_multistep('i', '<BS>', { 'minipairs_bs' })
+end)
+
 -- Move any selection in any direction.
 later(function()
   require('mini.move').setup({
@@ -642,8 +651,8 @@ end)
 later(function()
   -- Centered on screen
   local win_config = function()
-    local height = math.floor(0.618 * vim.o.lines)
-    local width = math.floor(0.618 * vim.o.columns)
+    local height = math.floor(0.8 * vim.o.lines)
+    local width = math.floor(0.9 * vim.o.columns)
     return {
       anchor = 'NW',
       height = height,
@@ -700,6 +709,12 @@ later(function()
         entry.filename = nil
 
         local relative_path = string.gsub(entry.path, vim.fn.getcwd() .. '/', '')
+        -- Hideous HACK to cover the fact that my notes folder has a hyphen in the title
+        local relative_path = string.gsub(
+          relative_path,
+          '/Users/hughearp/Library/CloudStorage/OneDrive%-NorwegianRefugeeCouncil/notes/',
+          ''
+        )
         local display = string.format('%s:%s:%s ', relative_path, entry.lnum, entry.col)
         local text = entry.text
         local start, finish, kw = Highlight.match(text)

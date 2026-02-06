@@ -168,6 +168,7 @@ nmap_leader('or', '<cmd>Obsidian rename<cr>',            'Rename note')
 nmap_leader('ot', '<cmd>Obsidian tags<cr>',              'Search tags')
 nmap_leader('ob', '<cmd>Obsidian backlinks<cr>',         'Backlinks')
 nmap_leader('of', '<cmd>Obsidian quick_switch<cr>',      'Open note')
+-- TODO do I have to adjust this based on my adjusted session.vim file?
 nmap_leader('oW',
       function()
         MiniSessions.write 'zzz-notes-tmp'
@@ -227,9 +228,9 @@ nmap_leader('X', '<cmd>qa!<cr>', 'Really quit')
 nmap_leader('y', '<cmd>let @*=@"<cr>', "Copy yank to clipboard")
 
 -- z is for screen movement
-nmap_leader('zb', '<cmd>ToggleCursorBot 15<cr>', 'Keep cursor at bottom by 10')
+nmap_leader('zb', '<cmd>ToggleCursorBot 15<cr>', 'Keep cursor at bottom by 15')
 nmap_leader('zm', '<cmd>ToggleCursorMid<cr>',    'Keep cursor in middle')
-nmap_leader('zt', '<cmd>ToggleCursorTop 15<cr>', 'Keep cursor at top by 10')
+nmap_leader('zt', '<cmd>ToggleCursorTop 15<cr>', 'Keep cursor at top by 15')
 
 -- punctuation are for common tasks
 nmap_leader(',', '<cmd>lua require("FTerm").open()<cr>', 'Open float term')
