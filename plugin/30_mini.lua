@@ -588,18 +588,18 @@ end)
 -- -- - Combos. Sequence of keys where each acts immediately plus execute extra
 -- --   action if all are typed fast enough. Useful for Insert mode mappings to not
 -- --   introduce delay when typing mapping keys without intention to execute action.
--- later(function()
---   require('mini.keymap').setup()
---   -- Navigate 'mini.completion' menu with `<Tab>` /  `<S-Tab>`
---   MiniKeymap.map_multistep('i', '<Tab>', { 'pmenu_next' })
---   MiniKeymap.map_multistep('i', '<S-Tab>', { 'pmenu_prev' })
---   -- On `<CR>` try to accept current completion item, fall back to accounting
---   -- for pairs from 'mini.pairs'
---   -- MiniKeymap.map_multistep('i', '<CR>', { 'pmenu_accept', 'minipairs_cr' })
---   -- On `<BS>` just try to account for pairs from 'mini.pairs'
---   -- MiniKeymap.map_multistep('i', '<BS>', { 'minipairs_bs' })
--- end)
---
+later(function()
+  require('mini.keymap').setup()
+  -- Navigate 'mini.completion' menu with `<Tab>` /  `<S-Tab>`
+  MiniKeymap.map_multistep('i', '<Tab>', { 'pmenu_next' })
+  MiniKeymap.map_multistep('i', '<S-Tab>', { 'pmenu_prev' })
+  -- On `<CR>` try to accept current completion item, fall back to accounting
+  -- for pairs from 'mini.pairs'
+  MiniKeymap.map_multistep('i', '<CR>', { 'pmenu_accept', 'minipairs_cr' })
+  -- On `<BS>` just try to account for pairs from 'mini.pairs'
+  MiniKeymap.map_multistep('i', '<BS>', { 'minipairs_bs' })
+end)
+
 -- Move any selection in any direction.
 later(function()
   require('mini.move').setup({
@@ -651,8 +651,8 @@ end)
 later(function()
   -- Centered on screen
   local win_config = function()
-    local height = math.floor(0.618 * vim.o.lines)
-    local width = math.floor(0.618 * vim.o.columns)
+    local height = math.floor(0.8 * vim.o.lines)
+    local width = math.floor(0.9 * vim.o.columns)
     return {
       anchor = 'NW',
       height = height,

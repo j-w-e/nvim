@@ -125,7 +125,7 @@ now_if_args(function()
         bufmap('n', '<localleader>rr', '<cmd>RMapsDesc<cr>')
         bufmap('n', '<localleader>rx', '<Plug>RClose')
         bufmap('i', '%%', ' %>%')
-        bufmap('n', '<localleader>l', '<Plug>RSendLine')
+        bufmap('n', '<localleader><enter>', '<Plug>RSendLine')
         bufmap('n', '<localleader>b', '<Plug>RPreviousRChunk')
         bufmap('n', '<localleader>n', '<Plug>RNextRChunk')
         bufmap('n', '<localleader>h', '<Plug>RHelp')
@@ -281,7 +281,7 @@ end)
 later(function()
   add('rlychrisg/keepcursor.nvim')
   require('keepcursor').setup({
-    enabled_on_start_v = 'top', -- options are "top", "middle" and "bottom".
+    enabled_on_start_v = 'middle', -- options are "top", "middle" and "bottom".
     enabled_on_start_h = 'none', -- options are "left" and "right".
   })
 end)

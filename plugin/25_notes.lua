@@ -51,6 +51,19 @@ if conf_ver == 'notes' then
     require('obsidian').setup({
       legacy_commands = false,
       ui = { enable = false },
+      callbacks = {
+        enter_note = function(note)
+          local actions = require('obsidian.actions')
+          vim.keymap.set('n', '<Tab>', function()
+            actions.nav_link('next')
+          end, { buffer = true, desc = 'Go to next link' })
+          vim.keymap.set('n', '<S-Tab>', function()
+            actions.nav_link('prev')
+          end, { buffer = true, desc = 'Go to previous link' })
+          vim.keymap.del('n', ']o', { buffer = true })
+          vim.keymap.del('n', '[o', { buffer = true })
+        end,
+      },
       checkbox = { create_new = false },
       completion = {
         nvim_cmp = false,
@@ -76,6 +89,9 @@ if conf_ver == 'notes' then
       new_notes_location = 'notes_subdir',
       notes_subdir = 'meetings',
       search = { sort_by = 'path' },
+      note = {
+        template = 'meeting_notes.md', -- A template you can define your self
+      },
 
       note_id_func = function(title)
         -- Create note IDs in a Zettelkasten format with a timestamp and a suffix.
@@ -117,15 +133,15 @@ if conf_ver == 'notes' then
       },
 
       templates = {
-        folder = 'templates',
+        folder = '.templates',
         date_format = '%Y-%m-%d-%a',
         time_format = '%H:%M',
       },
-      follow_url_func = function(url)
-        -- Open the URL in the default web browser.
-        vim.fn.jobstart({ 'open', url }) -- Mac OS
-        -- vim.ui.open(url) -- need Neovim 0.10.0+
-      end,
+      -- follow_url_func = function(url)
+      -- Open the URL in the default web browser.
+      -- vim.fn.jobstart({ 'open', url }) -- Mac OS
+      -- vim.ui.open(url) -- need Neovim 0.10.0+
+      -- end,
     })
   end)
 end

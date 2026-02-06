@@ -15,6 +15,9 @@ if conf_ver == 'notes' then
         end
         vim.o.title = true
         vim.o.titlestring = 'notes'
+        vim.defer_fn(function()
+          vim.cmd('filetype detect')
+        end, 150)
       end)
     end,
   })
@@ -46,7 +49,6 @@ end, 'Update from disk')
 -- 8 spaces  -> "+"
 -- repeats every 3 levels
 -- ignores yaml frontmatter
--- TODO this comes straight from chatgpt. There should be a way to avoid the goto ?
 local function replace_markdown_bullets()
   local bufnr = vim.api.nvim_get_current_buf()
   local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
