@@ -113,24 +113,29 @@ now_if_args(function()
     R_args = { '--quiet', '--no-save' },
     hook = {
       on_filetype = function()
-        local bufmap = function(mode, lhs, rhs)
-          local opts = {}
-          vim.api.nvim_buf_set_keymap(0, mode, lhs, rhs, opts)
+        local bufmap = function(mode, lhs, rhs, desc)
+          desc = desc or ''
+          vim.api.nvim_buf_set_keymap(0, mode, lhs, rhs, { desc = desc })
         end
         bufmap('i', '<c-->', '<Plug>RInsertAssign')
         bufmap('i', '<space><space>', '<Plug>RInsertPipe')
         bufmap('i', '`', '<Plug>RmdInsertChunk')
         bufmap('n', '<Enter>', '<Plug>RDSendLine')
         bufmap('v', '<Enter>', '<Plug>RSendSelection')
-        bufmap('n', '<localleader>rr', '<cmd>RMapsDesc<cr>')
-        bufmap('n', '<localleader>rx', '<Plug>RClose')
+        bufmap('n', '<localleader>rr', '<cmd>RMapsDesc<cr>', 'R mappings')
+        bufmap('n', '<localleader>rx', '<Plug>RClose', 'Close R')
         bufmap('i', '%%', ' %>%')
-        bufmap('n', '<localleader><enter>', '<Plug>RSendLine')
-        bufmap('n', '<localleader>b', '<Plug>RPreviousRChunk')
-        bufmap('n', '<localleader>n', '<Plug>RNextRChunk')
-        bufmap('n', '<localleader>h', '<Plug>RHelp')
-        bufmap('n', '<LocalLeader>rh', "<cmd>lua require('r.run').action('head', 'n', ', n = 15')<cr>")
-        bufmap('n', '<LocalLeader>kx', "<cmd>lua require('r.rmd').make('pptx')<cr>")
+        bufmap('n', '<localleader><enter>', '<Plug>RSendLine', 'Send line and stay')
+        bufmap('n', '<localleader>N', '<Plug>RPreviousRChunk', 'Go to previous chunk')
+        bufmap('n', '<localleader>n', '<Plug>RNextRChunk', 'Go to next chunk')
+        bufmap('n', '<localleader>h', '<Plug>RHelp', 'R help')
+        bufmap(
+          'n',
+          '<LocalLeader>rh',
+          "<cmd>lua require('r.run').action('head', 'n', ', n = 15')<cr>",
+          'head() on <cword>'
+        )
+        bufmap('n', '<LocalLeader>kx', "<cmd>lua require('r.rmd').make('pptx')<cr>", 'Knit pptx')
       end,
     },
     pdfviewer = 'open',
