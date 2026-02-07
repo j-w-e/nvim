@@ -11,7 +11,8 @@
 1. Again try to implement a todo picker for the currrent file
 2. Adjust the keepcursor autocommand to not operate in MiniFiles?
 3. When in markdown, on a blank line above another blank line above an unordered list, dd removes the list markers
-8. Decide if I want <leader>, or <c-,> to open FTerm
+4. Find out why following an obsidian link does not re-open file at last edited point
+5. Decide if I want <leader>, or <c-,> to open FTerm
 ]]
 --
 -- Bootstrap 'mini.nvim' manually in a way that it gets managed by 'mini.deps'

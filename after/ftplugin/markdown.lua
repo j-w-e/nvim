@@ -62,8 +62,8 @@ vim.b.minisurround_config = {
 
 vim.keymap.set('n', 'ss', 'sairs', { buffer = 0, desc = 'strikeout current line', remap = true })
 
-vim.keymap.set('n', '<localleader>sn', ']s1z=', { buffer = 0, desc = 'fix next spelling mistake' })
-vim.keymap.set('n', '<localleader>sp', '[s1z=', { buffer = 0, desc = 'fix prev spelling mistake' })
+vim.keymap.set('n', '<localleader>sn', 'mz]s1z=`z', { buffer = 0, desc = 'fix next spelling mistake' })
+vim.keymap.set('n', '<localleader>sp', 'mz[s1z=`z', { buffer = 0, desc = 'fix prev spelling mistake' })
 
 -- -- set keymap to fix last spelling mistake. And insert an undo breakpoint right before changing spelling
 -- local action = '<BS><BS><c-g>u<Esc>[s1z=gi'
@@ -74,13 +74,13 @@ au BufEnter * syn region markdownLink matchgroup=markdownLinkDelimiter start="("
 au BufEnter * hi link tkLink markdownLinkText
 ]])
 
-vim.keymap.set('i', '<CR>', '<CR><cmd>AutolistNewBullet<cr>')
-vim.keymap.set('n', 'o', 'o<cmd>AutolistNewBullet<cr>')
-vim.keymap.set('n', 'O', 'O<cmd>AutolistNewBulletBefore<cr>')
-vim.keymap.set('n', '<C-r>', '<cmd>AutolistRecalculate<cr>')
+vim.keymap.set('i', '<CR>', '<CR><cmd>AutolistNewBullet<cr>', { buffer = 0 })
+vim.keymap.set('n', 'o', 'o<cmd>AutolistNewBullet<cr>', { buffer = 0 })
+vim.keymap.set('n', 'O', 'O<cmd>AutolistNewBulletBefore<cr>', { buffer = 0 })
+vim.keymap.set('n', '<C-r>', '<cmd>AutolistRecalculate<cr>', { buffer = 0 })
 
 -- functions to recalculate list on edit
-vim.keymap.set('n', '>>', '>><cmd>AutolistRecalculate<cr>')
-vim.keymap.set('n', '<<', '<<<cmd>AutolistRecalculate<cr>')
-vim.keymap.set('n', 'dd', 'dd<cmd>AutolistRecalculate<cr>')
-vim.keymap.set('v', 'd', 'd<cmd>AutolistRecalculate<cr>')
+vim.keymap.set('n', '>>', '>><cmd>AutolistRecalculate<cr>', { buffer = 0 })
+vim.keymap.set('n', '<<', '<<<cmd>AutolistRecalculate<cr>', { buffer = 0 })
+vim.keymap.set('n', 'dd', 'dd<cmd>AutolistRecalculate<cr>', { buffer = 0 })
+vim.keymap.set('v', 'd', 'd<cmd>AutolistRecalculate<cr>', { buffer = 0 })
