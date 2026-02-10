@@ -84,3 +84,33 @@ vim.keymap.set('n', '>>', '>><cmd>AutolistRecalculate<cr>', { buffer = 0 })
 vim.keymap.set('n', '<<', '<<<cmd>AutolistRecalculate<cr>', { buffer = 0 })
 vim.keymap.set('n', 'dd', 'dd<cmd>AutolistRecalculate<cr>', { buffer = 0 })
 vim.keymap.set('v', 'd', 'd<cmd>AutolistRecalculate<cr>', { buffer = 0 })
+
+local function sort_present_line()
+  local prefix = 'Present: '
+  local buf = 0
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+
+  for row, line in ipairs(lines) do
+    if vim.startswith(line, prefix) then
+      -- Strip prefix
+      local content = line:sub(#prefix + 1)
+      -- Split by commas
+      local items = vim.split(content, ',', { trimempty = true })
+      -- Trim whitespace
+      for i, v in ipairs(items) do
+        items[i] = vim.trim(v)
+      end
+      -- Sort alphabetically
+      table.sort(items)
+      -- Rebuild and replace line
+      local sorted = table.concat(items, ', ')
+      vim.api.nvim_buf_set_lines(buf, row - 1, row, false, {
+        prefix .. sorted,
+      })
+      -- Stop after the first match
+      return
+    end
+  end
+end
+
+vim.keymap.set('n', '<localleader>ss', sort_present_line, { buffer = 0, desc = "Sort who's attending" })

@@ -291,6 +291,13 @@ later(function()
   })
 end)
 
+-- later(function()
+--   add('Aasim-A/scrollEOF.nvim')
+--   require('scrollEOF').setup({
+--     floating = false,
+--   })
+-- end)
+
 -- -- later(function()
 -- --   add('mawkler/demicolon.nvim')
 -- --   require('demicolon').setup({
