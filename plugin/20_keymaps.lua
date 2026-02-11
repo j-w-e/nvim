@@ -228,9 +228,18 @@ nmap_leader('X', '<cmd>qa!<cr>', 'Really quit')
 nmap_leader('y', '<cmd>let @*=@"<cr>', "Copy yank to clipboard")
 
 -- z is for screen movement
-nmap_leader('zb', '<cmd>ToggleCursorBot 15<cr>', 'Keep cursor at bottom by 15')
-nmap_leader('zm', '<cmd>ToggleCursorMid<cr>',    'Keep cursor in middle')
-nmap_leader('zt', '<cmd>ToggleCursorTop 15<cr>', 'Keep cursor at top by 15')
+nmap_leader('zb', function ()
+  vim.cmd('ToggleCursorBot 15')
+  vim.api.nvim_feedkeys('zb', 'n', false)
+end, 'Keep cursor at bottom by 15')
+nmap_leader('zt', function ()
+  vim.cmd('ToggleCursorTop 15')
+  vim.api.nvim_feedkeys('zt', 'n', false)
+end, 'Keep cursor at top by 15')
+nmap_leader('zm', function ()
+  vim.cmd('ToggleCursorMid')
+  vim.api.nvim_feedkeys('zz', 'n', false)
+end, 'Keep cursor in middle')
 
 -- punctuation are for common tasks
 nmap_leader(',', '<cmd>lua require("FTerm").open()<cr>', 'Open float term')
