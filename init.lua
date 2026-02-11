@@ -13,6 +13,7 @@
 3. When in markdown, on a blank line above another blank line above an unordered list, dd removes the list markers
 4. Find out why following an obsidian link does not re-open file at last edited point
 5. Decide if I want <leader>, or <c-,> to open FTerm
+6. Sometimes, enter in markdown after a colon indents 2 spaces, not 4. Find out why?
 ]]
 --
 -- Bootstrap 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
