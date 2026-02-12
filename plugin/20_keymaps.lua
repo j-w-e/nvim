@@ -387,6 +387,13 @@ vim.keymap.set('n', '[T', function()
   require('todo-comments').jump_next()
 end, { desc = 'Next todo comment' })
 
--- set keymap to fix last spelling mistake. And insert an undo breakpoint right before changing spelling
-local action = '<BS><BS><c-g>u<Esc>[s1z=gi'
-require('mini.keymap').map_combo('i', 'kk', action)
+-- -- set keymap to fix last spelling mistake. And insert an undo breakpoint right before changing spelling
+-- local action = '<BS><BS><c-g>u<Esc>[s1z=gi'
+-- require('mini.keymap').map_combo('i', 'kk', action)
+
+local keys = "<BS><BS><C-g>u<Esc>[s1z=<Cmd>lua require'spell_correct'.highlight_current_word()<CR>gi"
+keys = vim.api.nvim_replace_termcodes(keys, true, false, true)
+local function fix_prev_spelling_insert()
+  vim.api.nvim_feedkeys(keys, 'n', false)
+end
+require('mini.keymap').map_combo('i', 'kk', fix_prev_spelling_insert)

@@ -62,12 +62,43 @@ vim.b.minisurround_config = {
 
 vim.keymap.set('n', 'ss', 'sairs', { buffer = 0, desc = 'strikeout current line', remap = true })
 
-vim.keymap.set('n', '<localleader>sn', 'mz]s1z=`z', { buffer = 0, desc = 'fix next spelling mistake' })
-vim.keymap.set('n', '<localleader>sp', 'mz[s1z=`z', { buffer = 0, desc = 'fix prev spelling mistake' })
-
--- -- set keymap to fix last spelling mistake. And insert an undo breakpoint right before changing spelling
--- local action = '<BS><BS><c-g>u<Esc>[s1z=gi'
--- require('mini.keymap').map_combo('i', 'kk', action)
+local function fix_spelling(direction)
+  local ns = vim.api.nvim_create_namespace('spell_fix_highlight')
+  local bufnr = vim.api.nvim_get_current_buf()
+  -- Save cursor position
+  local original_pos = vim.api.nvim_win_get_cursor(0)
+  -- Go to appropriate spelling mistake
+  if direction == 'next' then
+    vim.cmd('normal! ]s')
+  else
+    vim.cmd('normal! [s')
+  end
+  -- Get word range BEFORE correction
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local word = vim.fn.expand('<cword>')
+  local start_col = col
+  local end_col = col + #word
+  -- Apply first suggestion
+  vim.cmd('normal! 1z=')
+  -- Get corrected word length
+  local new_word = vim.fn.expand('<cword>')
+  end_col = start_col + #new_word
+  -- Clear old highlight
+  vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
+  -- Highlight corrected word
+  vim.highlight.range(bufnr, ns, 'IncSearch', { row - 1, start_col }, { row - 1, end_col }, { inclusive = false })
+  -- Clear highlighting after 300ms
+  vim.defer_fn(function()
+    vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
+  end, 300)
+  -- Return to original position
+  vim.api.nvim_win_set_cursor(0, original_pos)
+end
+local fix_next_spelling = function()
+  fix_spelling('next')
+end
+vim.keymap.set('n', '<localleader>sp', fix_spelling, { buffer = 0, desc = 'fix prev spelling mistake' })
+vim.keymap.set('n', '<localleader>sn', fix_next_spelling, { buffer = 0, desc = 'fix next spelling mistake' })
 
 vim.cmd([[
 au BufEnter * syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")\ze\_W" keepend contained conceal contains=markdownUrl concealends

@@ -14,6 +14,7 @@
 4. Find out why following an obsidian link does not re-open file at last edited point
 5. Decide if I want <leader>, or <c-,> to open FTerm
 6. Sometimes, enter in markdown after a colon indents 2 spaces, not 4. Find out why?
+7. Fix the insert-mode function for kk which corrects previous spelling. Currently, if no spelling mistakes exist prior to the cursor, it just breaks to insert mode and stops.
 ]]
 --
 -- Bootstrap 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
