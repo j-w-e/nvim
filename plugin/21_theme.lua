@@ -12,6 +12,7 @@ now(function()
       highlights.MiniTrailspace = { fg = colors.magenta }
       highlights.CursorLine = { bg = colors.fg_gutter }
       highlights.RenderMarkdownCode = { bg = colors.bg_dark1 } -- this is a lighter backgroud for code blocks. I got tired of it
+      highlights.DiagnosticUnnecessary = { fg = colors.magenta }
     end,
   })
 
