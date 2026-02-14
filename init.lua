@@ -15,6 +15,11 @@
 5. Decide if I want <leader>, or <c-,> to open FTerm
 6. Sometimes, enter in markdown after a colon indents 2 spaces, not 4. Find out why?
 7. Fix the insert-mode function for kk which corrects previous spelling. Currently, if no spelling mistakes exist prior to the cursor, it just breaks to insert mode and stops.
+8. Add keymaps to adjust heading level in markdown
+9. Add keymaps to close a buffer as a navigate with <c-n> and <c-p>
+10 Replace obsidian.nvim with an alternative, eg https://github.com/magnusriga/markdown-tools.nvim or https://github.com/YousefHadder/markdown-plus.nvim
+    - obsidian.nvim does not allow linking to aliases, currently
+11. Work out how to get <c-l> to work to insert link from mini.pick in obsidian
 ]]
 --
 -- Bootstrap 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
