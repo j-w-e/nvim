@@ -183,7 +183,7 @@ later(function()
   require('boole').setup({
     mappings = {
       increment = '<C-a>',
-      decrement = '<C-x>',
+      decrement = '<C-/>',
     },
   })
 end)
@@ -299,24 +299,24 @@ later(function()
   })
 end)
 
--- -- later(function()
--- --   add('mawkler/demicolon.nvim')
--- --   require('demicolon').setup({
--- --     keymaps = {
--- --       repeat_motions = false, -- Don't create ; and , keymaps
--- --     },
--- --   })
--- --
--- --   local map, nxo = vim.keymap.set, { 'n', 'x', 'o' }
--- --
--- --   -- Stateless: always forward/backward
--- --   -- map(nxo, 'n', require('demicolon.repeat_jump').forward)
--- --   -- map(nxo, 'N', require('demicolon.repeat_jump').backward)
--- --
--- --   -- Or, stateful (remember the original motion’s direction)
--- --   map(nxo, ',', require('demicolon.repeat_jump').next)
--- --   map(nxo, ';', require('demicolon.repeat_jump').prev)
--- -- end)
+-- later(function()
+--   add('mawkler/demicolon.nvim')
+--   require('demicolon').setup({
+--     keymaps = {
+--       repeat_motions = false, -- Don't create ; and , keymaps
+--     },
+--   })
+--
+--   local map, nxo = vim.keymap.set, { 'n', 'x', 'o' }
+--
+--   -- Stateless: always forward/backward
+--   -- map(nxo, 'n', require('demicolon.repeat_jump').forward)
+--   -- map(nxo, 'N', require('demicolon.repeat_jump').backward)
+--
+--   -- Or, stateful (remember the original motion’s direction)
+--   map(nxo, ',', require('demicolon.repeat_jump').next)
+--   map(nxo, ';', require('demicolon.repeat_jump').prev)
+-- end)
 
 -- later(function()
 --     add('hat0uma/csvview.nvim')

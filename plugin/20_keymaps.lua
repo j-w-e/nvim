@@ -11,6 +11,7 @@ nmap(']p', '<Cmd>exe "put "  . v:register<CR>', 'Paste Below')
 
 nmap('<c-n>', '<cmd>bnext<cr>', 'Next buffer')
 nmap('<c-p>', '<cmd>bprev<cr>', 'Prev buffer')
+nmap('<c-x>', '<cmd>lua MiniBufremove.delete()<cr>', 'Delete buffer')
 
 -- Flash keymaps
 vim.keymap.set({ 'n', 'x', 'o' }, '-', function()
@@ -265,9 +266,6 @@ vim.keymap.set('n', 'dd', function()
   return 'dd'
 end, { expr = true })
 
--- TODO fix this
--- vim.keymap.set({ 'i', 'c' }, '<a-backspace>', '<c-w>', { desc = 'delete word' })
-
 nmap('g,', 'g;', 'prev change')
 nmap('g;', 'g,', 'next change')
 vim.keymap.set('x', '<leader>p', '"_dP', { desc = 'Paste without overwriting' })
@@ -307,14 +305,8 @@ local function smart_line_start()
     vim.api.nvim_win_set_cursor(0, { row, first_non_ws })
   end
 end
-vim.keymap.set({ 'n', 'x' }, 'gh', smart_line_start, { desc = 'Start of line' })
 
--- vim.keymap.set(
---   { 'n', 'x' },
---   'gh',
---   "(col('.') == matchend(getline('.'), '^\\s*')+1 ? '0' : '^')",
---   { expr = true, desc = 'Start of line' }
--- )
+vim.keymap.set({ 'n', 'x' }, 'gh', smart_line_start, { desc = 'Start of line' })
 vim.keymap.set({ 'n', 'x' }, 'gl', '$', { desc = 'End of line' })
 vim.keymap.set({ 'n', 'x' }, 'gj', '%', { desc = 'Matching bracket' })
 
@@ -333,42 +325,8 @@ nmap('U', '<c-r><cmd>lua MiniBracketed.register_undo_state()<cr>')
 
 -- From helpfile for mini.keymap
 -- Escape into Normal mode from Terminal mode
--- require('mini.keymap').map_combo('t', 'jk', '<BS><BS><C-\\><C-n>')
--- require('mini.keymap').map_combo('t', 'kj', '<BS><BS><C-\\><C-n>')
-
--- -- Helper functions from chatgpt to export markdown to html, so that I can copy and paste notes
--- local function pandoc_to_clipboard(input)
---   local cmd = "pandoc -f markdown -t html | pbcopy"
---   local handle = io.popen(cmd, "w")
---   if not handle then
---     vim.notify("Failed to run pandoc", vim.log.levels.ERROR)
---     return
---   end
---   handle:write(input)
---   handle:close()
---   vim.notify("Copied HTML to clipboard", vim.log.levels.INFO)
--- end
---
--- vim.keymap.set("n", "<leader>ox", function()
---   local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
---   pandoc_to_clipboard(table.concat(lines, "\n"))
--- end, { desc = "Pandoc: buffer → HTML → clipboard" })
---
--- vim.keymap.set("v", "<leader>ox", function()
---   local _, ls, cs = unpack(vim.fn.getpos("'<"))
---   local _, le, ce = unpack(vim.fn.getpos("'>"))
---
---   local lines = vim.api.nvim_buf_get_lines(0, ls - 1, le, false)
---
---   if #lines == 0 then return end
---
---   lines[1] = string.sub(lines[1], cs)
---   lines[#lines] = string.sub(lines[#lines], 1, ce)
---
---   pandoc_to_clipboard(table.concat(lines, "\n"))
--- end, { desc = "Pandoc: selection → HTML → clipboard" })
---
---
+require('mini.keymap').map_combo('t', 'jk', '<BS><BS><C-\\><C-n>')
+require('mini.keymap').map_combo('t', 'kj', '<BS><BS><C-\\><C-n>')
 
 -- navigating TODO comments
 vim.keymap.set('n', ']t', function()
