@@ -111,8 +111,33 @@ vim.keymap.set('n', 'O', 'O<cmd>AutolistNewBulletBefore<cr>', { buffer = 0 })
 vim.keymap.set('n', '<C-r>', '<cmd>AutolistRecalculate<cr>', { buffer = 0 })
 
 -- functions to recalculate list on edit
-vim.keymap.set('n', '>>', '>><cmd>AutolistRecalculate<cr>', { buffer = 0 })
-vim.keymap.set('n', '<<', '<<<cmd>AutolistRecalculate<cr>', { buffer = 0 })
+vim.keymap.set('n', '>>', function()
+  local line = vim.api.nvim_get_current_line()
+  if line:match('^#') then
+    -- Add an extra # at the start of the line
+    vim.api.nvim_set_current_line('#' .. line)
+  else
+    -- Fallback to normal >> and then run AutolistRecalculate
+    vim.cmd('normal! >>')
+    vim.cmd('AutolistRecalculate')
+  end
+end, { noremap = true, silent = true })
+vim.keymap.set('n', '<<', function()
+  local line = vim.api.nvim_get_current_line()
+  -- Match leading #'s
+  local hashes = line:match('^(#+)')
+  if hashes then
+    if #hashes > 1 then
+      -- Remove exactly one leading #
+      vim.api.nvim_set_current_line(line:sub(2))
+    end
+    -- If there's only one #, do nothing (never remove the last one)
+  else
+    -- Fallback to normal << and then run AutolistRecalculate
+    vim.cmd('normal! <<')
+    vim.cmd('AutolistRecalculate')
+  end
+end, { noremap = true, silent = true })
 vim.keymap.set('n', 'dd', 'dd<cmd>AutolistRecalculate<cr>', { buffer = 0 })
 vim.keymap.set('v', 'd', 'd<cmd>AutolistRecalculate<cr>', { buffer = 0 })
 
