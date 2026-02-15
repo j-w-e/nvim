@@ -160,6 +160,7 @@ xmap_leader('lf', formatting_cmd, 'Format selection')
 -- m is for 'Marks' or 'Misc'
 nmap_leader('m.', '@:', 'Repeat last command')
 nmap_leader('md', '<cmd>lcd %:p:h<cr>', 'Local cd to file')
+nmap_leader('ml', "'L", 'Lian')
 
 -- o is for 'Obsidian'.
 nmap_leader('oz', '<Cmd>lua MiniMisc.zoom()<CR>',          'Zoom toggle')
