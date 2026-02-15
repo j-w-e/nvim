@@ -23,7 +23,3 @@ now(function()
     vim.cmd('colorscheme tokyonight')
   end
 end)
-
-now(function()
-  add('necrogoru/shades-of-purple.nvim')
-end)
