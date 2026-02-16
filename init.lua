@@ -18,6 +18,8 @@
 10 Replace obsidian.nvim with an alternative, eg https://github.com/magnusriga/markdown-tools.nvim or https://github.com/YousefHadder/markdown-plus.nvim
     - obsidian.nvim does not allow linking to aliases, currently
 11. Work out how to get <c-l> to work to insert link from mini.pick in obsidian
+12. Make >> and << dot-repeatable on markdown headers. See https://gist.github.com/kylechui/a5c1258cd2d86755f97b10fc921315c3
+13. Make unception work. Currently, it just closes the terminal buffer
 ]]
 --
 -- Bootstrap 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
