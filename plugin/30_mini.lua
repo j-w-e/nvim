@@ -423,7 +423,7 @@ later(function()
 end)
 
 -- Navigate and manipulate file system
-later(function()
+now_if_args(function()
   -- Enable directory/file preview
   require('mini.files').setup({
     mappings = {
