@@ -3,7 +3,7 @@
 --   Sometimes is needed only if Neovim is started as `nvim -- path/to/file`.
 -- - Everything else is delayed until the first draw with `later()`.
 local now, later = MiniDeps.now, MiniDeps.later
-local now_if_args = _G.Config.now_if_args
+local now_if_args = Config.now_if_args
 
 local conf_ver = vim.fn.getenv('NVIM_PROFILE')
 
@@ -376,7 +376,7 @@ if conf_ver ~= 'notes' then
     local on_attach = function(ev)
       vim.bo[ev.buf].omnifunc = 'v:lua.MiniCompletion.completefunc_lsp'
     end
-    _G.Config.new_autocmd('LspAttach', nil, on_attach, "Set 'omnifunc'")
+    Config.new_autocmd('LspAttach', nil, on_attach, "Set 'omnifunc'")
 
     -- Advertise to servers that Neovim now supports certain set of completion and
     -- signature features through 'mini.completion'.
@@ -387,7 +387,7 @@ end
 -- Autohighlight word under cursor with a customizable delay.
 -- Word boundaries are defined based on `:h 'iskeyword'` option.
 later(function()
-  _G.cursorword_blocklist = function()
+  cursorword_blocklist = function()
     local curword = vim.fn.expand('<cword>')
     local filetype = vim.bo.filetype
 
@@ -401,7 +401,7 @@ later(function()
 
     vim.b.minicursorword_disable = vim.tbl_contains(blocklist, curword)
   end
-  vim.cmd('au CursorMoved * lua _G.cursorword_blocklist()')
+  vim.cmd('au CursorMoved * lua cursorword_blocklist()')
   require('mini.cursorword').setup()
 end)
 
@@ -519,14 +519,14 @@ later(function()
     vim.ui.open(MiniFiles.get_fs_entry().path)
   end
 
-  _G.Config.new_autocmd('User', 'MiniFilesExplorerOpen', add_marks, 'Add bookmarks')
-  _G.Config.new_autocmd('User', 'MiniFilesBufferCreate', function(args)
+  Config.new_autocmd('User', 'MiniFilesExplorerOpen', add_marks, 'Add bookmarks')
+  Config.new_autocmd('User', 'MiniFilesBufferCreate', function(args)
     local b = args.data.buf_id
     vim.keymap.set('n', 'g~', set_cwd, { buffer = b, desc = 'Set cwd' })
     vim.keymap.set('n', 'gX', ui_open, { buffer = b, desc = 'OS open' })
     vim.keymap.set('n', 'gy', yank_path, { buffer = b, desc = 'Yank path' })
   end, 'Add keymaps bookmarks')
-  _G.Config.new_autocmd('User', 'MiniFilesWindowUpdate', ensure_center_layout, 'Show MiniFiles centered on screen')
+  Config.new_autocmd('User', 'MiniFilesWindowUpdate', ensure_center_layout, 'Show MiniFiles centered on screen')
 end)
 
 -- Git integration for more straightforward Git actions based on Neovim's state.
@@ -805,7 +805,7 @@ later(function()
     end
   end
   -- local au_opts = { pattern = 'MiniSnippetsSessionJump', callback = fin_stop }
-  _G.Config.new_autocmd('User', 'MiniSnippetsSessionJump', fin_stop, 'Stop snippet on reaching final tab')
+  Config.new_autocmd('User', 'MiniSnippetsSessionJump', fin_stop, 'Stop snippet on reaching final tab')
   -- vim.api.nvim_create_autocmd('User', au_opts)
 
   snippets.setup({

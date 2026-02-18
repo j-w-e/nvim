@@ -25,7 +25,7 @@ end, { desc = 'Flash remote' })
 
 -- Leader mappings ============================================================
 
-_G.Config.leader_group_clues = {
+Config.leader_group_clues = {
   { mode = 'n', keys = '<Leader>b', desc = '+Buffer' },
   { mode = 'n', keys = '<Leader>e', desc = '+Explore/Edit' },
   { mode = 'n', keys = '<Leader>f', desc = '+Find/Files' },
