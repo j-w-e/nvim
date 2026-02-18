@@ -149,7 +149,7 @@ local formatting_cmd = '<Cmd>lua require("conform").format({lsp_fallback=true})<
 
 nmap_leader('la', '<Cmd>lua vim.lsp.buf.code_action()<CR>',     'Actions')
 nmap_leader('ld', '<Cmd>lua vim.diagnostic.open_float()<CR>',   'Diagnostic popup')
-nmap_leader('lf', formatting_cmd,                               'Format')
+nmap_leader('lf', '<Cmd>lua require("conform").format()<CR>',   'Format')
 nmap_leader('li', '<Cmd>lua vim.lsp.buf.implementation()<CR>',  'Implementation')
 nmap_leader('lh', '<Cmd>lua vim.lsp.buf.hover()<CR>',           'Hover')
 nmap_leader('lr', '<Cmd>lua vim.lsp.buf.rename()<CR>',          'Rename')
@@ -157,7 +157,7 @@ nmap_leader('lR', '<Cmd>lua vim.lsp.buf.references()<CR>',      'References')
 nmap_leader('ls', '<Cmd>lua vim.lsp.buf.definition()<CR>',      'Source definition')
 nmap_leader('lt', '<Cmd>lua vim.lsp.buf.type_definition()<CR>', 'Type definition')
 
-xmap_leader('lf', formatting_cmd, 'Format selection')
+xmap_leader('lf', '<Cmd>lua require("conform").format()<CR>',   'Format selection')
 
 -- m is for 'Marks' or 'Misc'
 nmap_leader('m.', '@:', 'Repeat last command')

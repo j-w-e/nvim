@@ -77,6 +77,10 @@ later(function()
   add('stevearc/conform.nvim')
 
   require('conform').setup({
+    default_format_opts = {
+      -- Allow formatting from LSP server if no dedicated formatter is available
+      lsp_format = 'fallback',
+    },
     -- Map of filetype to formatters
     formatters_by_ft = {
       lua = { 'stylua' },
