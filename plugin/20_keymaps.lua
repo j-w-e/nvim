@@ -62,6 +62,7 @@ nmap_leader('bW', '<Cmd>lua MiniBufremove.wipeout(0, true)<CR>', 'Wipeout!')
 
 -- c is for 'Code' or 'Commands'
 nmap_leader('c.', '@:', 'Repeat last cmd')
+nmap_leader('cd', '<cmd>lcd %:p:h<cr>', 'lcd to file')
 
 -- e is for 'Explore' and 'Edit'. Common usage:
 -- - `<Leader>ed` - open explorer at current working directory
