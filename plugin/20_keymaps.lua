@@ -358,3 +358,6 @@ local function fix_prev_spelling_insert()
   vim.api.nvim_feedkeys(keys, 'n', false)
 end
 require('mini.keymap').map_combo('i', 'kk', fix_prev_spelling_insert)
+
+-- Bind <m-bs> to delete word in insert mode
+vim.keymap.set({ 'i', 't', 'c' }, '<M-BS>', '<c-w>', { desc = 'Delete word' })
