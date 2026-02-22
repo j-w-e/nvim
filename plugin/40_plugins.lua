@@ -187,7 +187,7 @@ later(function()
   require('boole').setup({
     mappings = {
       increment = '<C-a>',
-      decrement = '<C-/>',
+      decrement = '<C-x>',
     },
   })
 end)

@@ -9,10 +9,6 @@ end
 nmap('[p', '<Cmd>exe "put! " . v:register<CR>', 'Paste Above')
 nmap(']p', '<Cmd>exe "put "  . v:register<CR>', 'Paste Below')
 
-nmap('<c-n>', '<cmd>bnext<cr>', 'Next buffer')
-nmap('<c-p>', '<cmd>bprev<cr>', 'Prev buffer')
-nmap('<c-x>', '<cmd>lua MiniBufremove.delete()<cr>', 'Delete buffer')
-
 -- Flash keymaps
 vim.keymap.set({ 'n', 'x', 'o' }, '-', function()
   require('flash').jump()
@@ -361,3 +357,9 @@ require('mini.keymap').map_combo('i', 'kk', fix_prev_spelling_insert)
 
 -- Bind <m-bs> to delete word in insert mode
 vim.keymap.set({ 'i', 't', 'c' }, '<M-BS>', '<c-w>', { desc = 'Delete word' })
+
+-- Bind <m- > for buffer navigation
+nmap('<m-l>', '<cmd>bnext<cr>', 'Next buffer')
+nmap('<m-h>', '<cmd>bprev<cr>', 'Prev buffer')
+nmap('<m-b>', '<Cmd>b#<CR>', 'Alternate buffer')
+nmap('<m-x>', '<cmd>lua MiniBufremove.delete()<cr>', 'Delete buffer')
