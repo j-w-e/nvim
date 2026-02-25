@@ -747,6 +747,34 @@ later(function()
   end
 end)
 
+-- TODO the query I need to run, to get the right data in a TODO picker, is probably:
+--[[
+
+rg --json "TODO" \
+| jq -c '
+  select(.type == "match" or .type == "begin")
+  | if .type == "match" then
+      . as $event
+      | $event.data.submatches[]
+      | {
+          filename: $event.data.path.text,
+          l_num: $event.data.line_number,
+          line_text: $event.data.lines.text,
+          col_num: .start + 1
+        }
+    else
+      {
+        filename: .data.path.text,
+        l_num: 0,
+        line_text: .data.path.text,
+        col_num: 0
+      }
+    end
+'
+
+]]
+--
+
 -- Manage and expand snippets.
 -- How to manage snippets:
 -- - 'mini.snippets' itself doesn't come with preconfigured snippets. Instead there
