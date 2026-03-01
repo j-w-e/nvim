@@ -94,7 +94,7 @@ nmap_leader('eq', explore_quickfix,                         'Quickfix')
 -- f is for 'Fuzzy Find'.
 local pick_added_hunks_buf = '<Cmd>Pick git_hunks path="%" scope="staged"<CR>'
 local pick_workspace_symbols_live = '<Cmd>Pick lsp scope="workspace_symbol_live"<CR>'
-local todo_picker = '<cmd>Pick todo<cr>'
+-- local todo_picker = '<cmd>Pick todo<cr>'
 local todo_picker_cur_file = '<Cmd>lua MiniExtra.pickers.buf_lines({ scope = "current", preserve_order = true }, { source = { name = "Find todos (buf) - < c-space > to refine" } } )<CR>TODO'
 
 nmap_leader('f/', '<Cmd>Pick history scope="/"<CR>',            '"/" history')
@@ -119,8 +119,8 @@ nmap_leader('fr', '<Cmd>Pick resume<CR>',                       'Resume')
 nmap_leader('fR', '<Cmd>Pick lsp scope="references"<CR>',       'References (LSP)')
 nmap_leader('fs', pick_workspace_symbols_live,                  'Symbols workspace (live)')
 nmap_leader('fS', '<Cmd>Pick lsp scope="document_symbol"<CR>',  'Symbols document')
-nmap_leader('ft', todo_picker,                                  'TODO picker')
-nmap_leader('fT', todo_picker_cur_file,                         'TODO picker (buf)')
+-- nmap_leader('ft', todo_picker,                                  'TODO picker')
+nmap_leader('ft', todo_picker_cur_file,                         'TODO picker (buf)')
 nmap_leader('fv', '<Cmd>Pick visit_paths cwd=""<CR>',           'Visit paths (all)')
 nmap_leader('fV', '<Cmd>Pick visit_paths<CR>',                  'Visit paths (cwd)')
 nmap_leader('fw', '<Cmd>w<CR>',                                 'Write file')
