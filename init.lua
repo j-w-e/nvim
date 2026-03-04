@@ -14,6 +14,7 @@
 4. Find out why following an obsidian link does not re-open file at last edited point
 5. Decide if I want <leader>, or <c-,> to open FTerm
 6. Sometimes, enter in markdown after a colon indents 2 spaces, not 4. Find out why?
+    - This is because treesitter incorrectly detects multiple levels of bullets as an indented code block
 7. Fix the insert-mode function for kk which corrects previous spelling. Currently, if no spelling mistakes exist prior to the cursor, it just breaks to insert mode and stops.
 10 Replace obsidian.nvim with an alternative, eg https://github.com/magnusriga/markdown-tools.nvim or https://github.com/YousefHadder/markdown-plus.nvim
     - obsidian.nvim does not allow linking to aliases, currently
