@@ -176,3 +176,18 @@ local function sort_present_line()
 end
 
 vim.keymap.set('n', '<localleader>ss', sort_present_line, { buffer = 0, desc = "Sort who's attending" })
+
+-- Keymapping to export selected markdown as HTML and open in browser using 'open' command (macOS)
+vim.keymap.set('n', '<localleader>x', function()
+  vim.cmd('write') -- Ensure the file is saved
+  -- Run pandoc with the saved file
+  vim.fn.system('pandoc ' .. vim.fn.expand('%') .. ' -f markdown -t html -o /tmp/temp.html')
+  -- Open the generated HTML file
+  vim.fn.system('open /tmp/temp.html')
+end, { noremap = true, silent = true })
+vim.keymap.set(
+  'v',
+  '<localleader>x',
+  ':w! /tmp/temp.md | !pandoc /tmp/temp.md -f markdown -t html -o /tmp/temp.html && open /tmp/temp.html &<CR>',
+  { noremap = true, silent = true }
+)
