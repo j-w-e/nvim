@@ -7,9 +7,7 @@ now(function()
   add('obsidian-nvim/obsidian.nvim')
 end)
 
-local conf_ver = vim.fn.getenv('NVIM_PROFILE')
-
-if conf_ver == 'notes' then
+if Config.conf_ver == 'notes' then
   now(function()
     -- add({
     --   source = 'saghen/blink.cmp',

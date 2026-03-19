@@ -1,5 +1,4 @@
-local conf_ver = vim.fn.getenv('NVIM_PROFILE')
-if conf_ver == 'notes' then
+if Config.conf_ver == 'notes' then
   vim.api.nvim_create_autocmd('VimEnter', {
     once = true,
     callback = function()

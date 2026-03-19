@@ -5,8 +5,6 @@
 local now, later = MiniDeps.now, MiniDeps.later
 local now_if_args = Config.now_if_args
 
-local conf_ver = vim.fn.getenv('NVIM_PROFILE')
-
 -- Step one ===================================================================
 
 -- Common configuration presets.
@@ -60,7 +58,7 @@ end)
 -- Session management. A thin wrapper around `:h mksession` that consistently
 -- manages session files.
 local autoread, autowrite = false, false
-if conf_ver == 'notes' then
+if Config.conf_ver == 'notes' then
   -- autoread = true
   autowrite = true
 end
@@ -76,7 +74,7 @@ now(function()
 end)
 
 -- Start screen.
-if conf_ver ~= 'notes' then
+if Config.conf_ver ~= 'notes' then
   now(function()
     local ministarter = require('mini.starter')
     ministarter.setup({
@@ -349,7 +347,7 @@ later(function()
   })
 end)
 
-if conf_ver ~= 'notes' then
+if Config.conf_ver ~= 'notes' then
   -- Completion and signature help. Implements async "two stage" autocompletion:
   -- - Based on attached LSP servers that support completion.
   -- - Fallback (based on built-in keyword completion) if there is no LSP candidates.

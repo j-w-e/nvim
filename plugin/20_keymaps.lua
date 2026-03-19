@@ -49,8 +49,7 @@ end
 local new_scratch_buffer = function()
   local buf = vim.api.nvim_create_buf(true, true)
   vim.api.nvim_win_set_buf(0, buf)
-  local conf_ver = vim.fn.getenv('NVIM_PROFILE')
-  if conf_ver == 'notes' then
+  if Config.conf_ver == 'notes' then
     vim.bo[buf].filetype = "markdown"
   end
 end

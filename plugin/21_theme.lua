@@ -16,8 +16,7 @@ now(function()
     end,
   })
 
-  local conf_ver = vim.fn.getenv('NVIM_PROFILE')
-  if conf_ver == 'notes' then
+  if Config.conf_ver == 'notes' then
     vim.cmd('colorscheme tokyonight-night')
   else
     vim.cmd('colorscheme tokyonight')
