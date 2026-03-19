@@ -138,7 +138,13 @@ vim.keymap.set('n', '<<', function()
     vim.cmd('AutolistRecalculate')
   end
 end, { noremap = true, silent = true })
-vim.keymap.set('n', 'dd', 'dd<cmd>AutolistRecalculate<cr>', { buffer = 0 })
+-- vim.keymap.set('n', 'dd', 'dd<cmd>AutolistRecalculate<cr>', { buffer = 0 })
+vim.keymap.set('n', 'dd', function()
+  if vim.fn.getline('.') == '' then
+    return '"_dd'
+  end
+  return 'dd<cmd>AutolistRecalculate<cr>'
+end, { buffer = 0, expr = true })
 vim.keymap.set('v', 'd', 'd<cmd>AutolistRecalculate<cr>', { buffer = 0 })
 
 local function sort_present_line()
