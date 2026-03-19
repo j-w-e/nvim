@@ -183,11 +183,16 @@ vim.keymap.set('n', '<localleader>x', function()
   -- Run pandoc with the saved file
   vim.fn.system('pandoc ' .. vim.fn.expand('%') .. ' -f markdown -t html -o /tmp/temp.html')
   -- Open the generated HTML file
-  vim.fn.system('open /tmp/temp.html')
+  os.execute('zsh ~/.config/nvim/copy_html_contents.sh')
+  -- vim.fn.system('open /tmp/temp.html')
+  -- vim.fn.system(
+  --   'open /tmp/temp.html & osascript -e "tell application \\"System Events\\" to keystroke \\"a\\" using command down" -e "tell application \\"System Events\\" to keystroke \\"c\\" using command down" -e "tell application \\"System Events\\" to keystroke \\"w\\" using command down" -e "tell application \\"System Events\\" to keystroke tab using command down"'
+  -- )
 end, { noremap = true, silent = true })
 vim.keymap.set(
   'v',
   '<localleader>x',
-  ':w! /tmp/temp.md | !pandoc /tmp/temp.md -f markdown -t html -o /tmp/temp.html && open /tmp/temp.html &<CR>',
+  ':write! /tmp/temp.md | silent !pandoc /tmp/temp.md -f markdown -t html -o /tmp/temp.html && ~/.config/nvim/copy_html_contents.sh<CR>',
+  -- ':write! /tmp/temp.md | silent !pandoc /tmp/temp.md -f markdown -t html -o /tmp/temp.html && open /tmp/temp.html &<CR>',
   { noremap = true, silent = true }
 )
