@@ -135,6 +135,14 @@ if Config.conf_ver == 'notes' then
         date_format = '%Y-%m-%d-%a',
         time_format = '%H:%M',
       },
+      daily_notes = {
+        enabled = true,
+        folder = 'daily-notes',
+        date_format = 'YYYY-MM-DD',
+        alias_format = nil,
+        default_tags = { 'daily-notes', 'reflections' },
+        workdays_only = true,
+      },
       -- follow_url_func = function(url)
       -- Open the URL in the default web browser.
       -- vim.fn.jobstart({ 'open', url }) -- Mac OS
