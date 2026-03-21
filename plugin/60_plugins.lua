@@ -316,15 +316,8 @@ later(function()
 
   local map, nxo = vim.keymap.set, { 'n', 'x', 'o' }
 
-  -- Stateless: always forward/backward
-  -- map(nxo, 'n', require('demicolon.repeat_jump').forward)
-  -- map(nxo, 'N', require('demicolon.repeat_jump').backward)
-
-  -- Or, stateful (remember the original motion’s direction)
   map(nxo, ',', require('demicolon.repeat_jump').next)
   map(nxo, ';', require('demicolon.repeat_jump').prev)
-
-  -- TODO think about how to do this type of integration for mini.bracketed too, and maybe my todo jump function?
 
   local flash_char = require('flash.plugins.char')
   ---@param options { key: string, fowrard: boolean }
@@ -384,6 +377,21 @@ later(function()
   vim.keymap.set({ 'n', 'x', 'o' }, 'F', flash_jump({ key = 'F', forward = false }), { desc = 'Flash F' })
   vim.keymap.set({ 'n', 'x', 'o' }, 't', flash_jump({ key = 't', forward = true }), { desc = 'Flash t' })
   vim.keymap.set({ 'n', 'x', 'o' }, 'T', flash_jump({ key = 'T', forward = false }), { desc = 'Flash T' })
+
+  local function todo_jump(options)
+    return function()
+      require('demicolon.jump').repeatably_do(function(o)
+        local forward = o.forward
+        if forward then
+          require('todo-comments').jump_next()
+        else
+          require('todo-comments').jump_prev()
+        end
+      end, options)
+    end
+  end
+  vim.keymap.set({ 'n', 'x', 'o' }, '[t', todo_jump({ forward = false }))
+  vim.keymap.set({ 'n', 'x', 'o' }, ']t', todo_jump({ forward = true }))
 end)
 
 -- later(function()

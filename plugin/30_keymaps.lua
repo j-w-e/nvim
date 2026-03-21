@@ -487,27 +487,6 @@ nmap('U', '<c-r><cmd>lua MiniBracketed.register_undo_state()<cr>')
 require('mini.keymap').map_combo('t', 'jk', '<BS><BS><C-\\><C-n>')
 require('mini.keymap').map_combo('t', 'kj', '<BS><BS><C-\\><C-n>')
 
--- navigating TODO comments
-vim.keymap.set('n', ']t', function()
-  require('todo-comments').jump_next()
-end, { desc = 'Next todo comment' })
-
-vim.keymap.set('n', '[t', function()
-  require('todo-comments').jump_prev()
-end, { desc = 'Previous todo comment' })
-
-vim.keymap.set('n', ']T', function()
-  require('todo-comments').jump_prev()
-end, { desc = 'Prev todo comment' })
-
-vim.keymap.set('n', '[T', function()
-  require('todo-comments').jump_next()
-end, { desc = 'Next todo comment' })
-
--- -- set keymap to fix last spelling mistake. And insert an undo breakpoint right before changing spelling
--- local action = '<BS><BS><c-g>u<Esc>[s1z=gi'
--- require('mini.keymap').map_combo('i', 'kk', action)
-
 local keys = "<BS><BS><C-g>u<Esc>[s1z=<Cmd>lua require'spell_correct'.highlight_current_word()<CR>gi"
 keys = vim.api.nvim_replace_termcodes(keys, true, false, true)
 local function fix_prev_spelling_insert()

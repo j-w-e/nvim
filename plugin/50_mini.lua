@@ -284,13 +284,13 @@ later(function()
       miniclue.gen_clues.windows({ submode_resize = true }),
       miniclue.gen_clues.z(),
       -- submodes for buffer navigation
-      { mode = 'n', keys = ']b', postkeys = ']' },
-      { mode = 'n', keys = '[b', postkeys = '[' },
+      { mode = 'n', keys = ']b' },
+      { mode = 'n', keys = '[b' },
       -- submodes for finding TODO notes
-      { mode = 'n', keys = '[t', postkeys = '[' },
-      { mode = 'n', keys = '[T', postkeys = '[' },
-      { mode = 'n', keys = ']t', postkeys = ']' },
-      { mode = 'n', keys = ']T', postkeys = ']' },
+      { mode = 'n', keys = '[t' },
+      { mode = 'n', keys = '[T' },
+      { mode = 'n', keys = ']t' },
+      { mode = 'n', keys = ']T' },
     },
     -- Explicitly opt-in for set of common keys to trigger clue window
     triggers = {
