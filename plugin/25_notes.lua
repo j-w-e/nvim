@@ -88,7 +88,7 @@ if Config.conf_ver == 'notes' then
       notes_subdir = 'meetings',
       search = { sort_by = 'path' },
       note = {
-        template = 'meeting_notes.md', -- A template you can define your self
+        template = 'template.md', -- A template you can define your self
       },
 
       note_id_func = function(title)
@@ -134,6 +134,23 @@ if Config.conf_ver == 'notes' then
         folder = '.templates',
         date_format = '%Y-%m-%d-%a',
         time_format = '%H:%M',
+        substitutions = {
+          folder_block = function(note)
+            local path = note.partial_note.path.filename
+            -- Get the last directory in the path
+            local last_dir = path:match('.*/(.-)/[^/]*$')
+
+            -- Check if the last directory contains 'meeting' or 'project'
+            if last_dir:lower():find('meeting') then
+              return 'Present: '
+            elseif last_dir:lower():find('proj') then
+              return 'Links to area: '
+            elseif last_dir:lower():find('daily') then
+              return '- What went well:\n- What should I have done better:\n- What I noticed about the team:'
+            end
+            return ''
+          end,
+        },
       },
       daily_notes = {
         enabled = true,
@@ -142,6 +159,7 @@ if Config.conf_ver == 'notes' then
         alias_format = nil,
         default_tags = { 'daily-notes', 'reflections' },
         workdays_only = true,
+        template = 'template.md',
       },
       -- follow_url_func = function(url)
       -- Open the URL in the default web browser.

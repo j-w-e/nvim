@@ -20,13 +20,7 @@
 11. Work out how to get <c-l> to work to insert link from mini.pick in obsidian
 12. Make >> and << dot-repeatable on markdown headers. See https://gist.github.com/kylechui/a5c1258cd2d86755f97b10fc921315c3
 13. Make unception work. Currently, it just closes the terminal buffer
-14. Find out if I can adjust templates in obsidian automatically based on the folder of the path. ChatGPT seems to think so, by using
-        template = function(opts) end,
-        with opts = {
-                      title = string|nil,   -- the note title (if provided)
-                      dir = string,         -- absolute path to the directory where the note will be created
-                      id = string,          -- the generated note ID / filename (without extension)
-                    }
+15. Get demicolon (https://github.com/mawkler/demicolon.nvim) to work, especially with mini.bracketed
 ]]
 --
 -- Bootstrap 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
