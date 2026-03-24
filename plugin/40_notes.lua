@@ -176,13 +176,18 @@ now(function()
     file_types = { 'markdown', 'Rmd', 'quarto' },
     code = {
       render_modes = { 'i' },
+      conceal_delimiters = false,
+      language = false,
       style = 'full',
-      border = 'thick',
+      border = 'none',
     },
     html = {
       comment = {
         conceal = false,
       },
+    },
+    link = {
+      render_modes = { 'i' },
     },
   })
 end)
