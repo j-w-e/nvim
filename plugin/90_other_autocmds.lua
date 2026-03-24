@@ -93,3 +93,86 @@ end
 Config.new_autocmd('BufWritePre', '*.md', function(o)
   replace_markdown_bullets()
 end, 'Update markdown bullets')
+
+-- Code to check updates to MiniMax config
+local repo_url = 'https://github.com/nvim-mini/MiniMax.git'
+local local_repo_path = vim.fn.stdpath('data') .. '/repo_check/' .. repo_url:match('.*/(.*)%.git') -- path to store the repo
+local state_file = local_repo_path .. '/MiniMax_last_commit.json'
+local check_interval = 7 * 24 * 60 * 60 -- 1 week in seconds
+
+-- Read JSON state
+local function read_state()
+  local f = io.open(state_file, 'r')
+  if not f then
+    return { last_check = 0, last_sha = nil }
+  end
+  local content = f:read('*a')
+  f:close()
+  return vim.fn.json_decode(content)
+end
+
+-- Write JSON state
+local function write_state(state)
+  local f = io.open(state_file, 'w')
+  if f then
+    f:write(vim.fn.json_encode(state))
+    f:close()
+  end
+end
+
+-- Clone or pull the repository
+local function update_repo()
+  if vim.fn.isdirectory(local_repo_path) == 0 then
+    -- If repo doesn't exist, clone it
+    vim.fn.system({ 'git', 'clone', repo_url, local_repo_path })
+  else
+    -- If repo exists, pull latest changes
+    vim.fn.system({ 'git', '-C', local_repo_path, 'pull' })
+  end
+end
+
+-- Get latest commit SHA from the local git repository
+local function get_latest_commit(callback)
+  local sha = vim.fn.system({ 'git', '-C', local_repo_path, 'rev-parse', 'HEAD' }):gsub('\n', '')
+  if sha and #sha > 0 then
+    callback(sha)
+  end
+end
+
+-- Main check function
+local function check_repo()
+  local state = read_state()
+  local now = os.time()
+
+  -- Only run once per interval
+  if now - (state.last_check or 0) < check_interval then
+    return
+  end
+
+  -- Update the repository (pull latest changes)
+  update_repo()
+
+  get_latest_commit(function(latest_sha)
+    if not latest_sha then
+      return
+    end
+
+    if state.last_sha and state.last_sha ~= latest_sha then
+      vim.notify(
+        'GitHub repo ' .. repo_url:match('.*/(.*)%.git') .. ' has new updates!',
+        vim.log.levels.INFO,
+        { title = 'Repo Update' }
+      )
+    end
+
+    -- Update state
+    state.last_check = now
+    state.last_sha = latest_sha
+    write_state(state)
+  end)
+end
+
+-- Auto-run on startup (deferred so it doesn't block UI)
+vim.defer_fn(function()
+  check_repo()
+end, 2000)
