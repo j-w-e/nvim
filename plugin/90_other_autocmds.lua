@@ -96,9 +96,10 @@ end, 'Update markdown bullets')
 
 -- Code to check updates to MiniMax config
 local repo_url = 'https://github.com/nvim-mini/MiniMax.git'
-local local_repo_path = vim.fn.stdpath('data') .. '/repo_check/' .. repo_url:match('.*/(.*)%.git') -- path to store the repo
-local state_file = local_repo_path .. '/MiniMax_last_commit.json'
-local check_interval = 7 * 24 * 60 * 60 -- 1 week in seconds
+local repo_name = repo_url:match('.*/(.*)%.git')
+local local_repo_path = vim.fn.stdpath('data') .. '/repo_check/' .. repo_name
+local state_file = local_repo_path .. '/last_commit.json'
+local check_interval = 7 * 24 * 60 * 60 -- 1 week
 
 -- Read JSON state
 local function read_state()
@@ -139,6 +140,40 @@ local function get_latest_commit(callback)
   end
 end
 
+-- Try to find CHANGELOG.md
+local function find_changelog()
+  local candidates = {
+    'CHANGELOG.md',
+    'Changelog.md',
+    'changelog.md',
+    'CHANGELOG',
+  }
+
+  for _, name in ipairs(candidates) do
+    local path = local_repo_path .. '/' .. name
+    if vim.fn.filereadable(path) == 1 then
+      return path
+    end
+  end
+  return nil
+end
+
+-- Prompt user to open changelog
+local function prompt_changelog()
+  vim.schedule(function()
+    local choice = vim.fn.confirm('Repo ' .. repo_name .. ' updated. View CHANGELOG?', '&Yes\n&No', 1)
+
+    if choice == 1 then
+      local changelog = find_changelog()
+      if changelog then
+        vim.cmd('edit ' .. changelog)
+      else
+        vim.notify('No CHANGELOG file found in repo', vim.log.levels.WARN, { title = 'Repo Update' })
+      end
+    end
+  end)
+end
+
 -- Main check function
 local function check_repo()
   local state = read_state()
@@ -158,11 +193,7 @@ local function check_repo()
     end
 
     if state.last_sha and state.last_sha ~= latest_sha then
-      vim.notify(
-        'GitHub repo ' .. repo_url:match('.*/(.*)%.git') .. ' has new updates!',
-        vim.log.levels.INFO,
-        { title = 'Repo Update' }
-      )
+      prompt_changelog()
     end
 
     -- Update state
