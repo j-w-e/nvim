@@ -9,10 +9,6 @@ end
 nmap('[p', '<Cmd>exe "put! " . v:register<CR>', 'Paste Above')
 nmap(']p', '<Cmd>exe "put "  . v:register<CR>', 'Paste Below')
 
-nmap('<c-n>', '<cmd>bnext<cr>', 'Next buffer')
-nmap('<c-p>', '<cmd>bprev<cr>', 'Prev buffer')
-nmap('<c-x>', '<cmd>lua MiniBufremove.delete()<cr>', 'Delete buffer')
-
 -- Flash keymaps
 vim.keymap.set({ 'n', 'x', 'o' }, '-', function()
   require('flash').jump()
