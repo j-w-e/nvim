@@ -87,12 +87,12 @@ end
 nmap_leader('ed', '<Cmd>lua MiniFiles.open()<CR>',          'Directory')
 nmap_leader('ef', explore_at_file,                          'File directory')
 nmap_leader('ei', '<Cmd>edit $MYVIMRC<CR>',                 'init.lua')
-nmap_leader('ek', edit_plugin_file('20_keymaps.lua'),       'Keymaps config')
+nmap_leader('ek', edit_plugin_file('30_keymaps.lua'),       'Keymaps config')
 nmap_leader('el', explore_locations,                        'Locations')
-nmap_leader('em', edit_plugin_file('30_mini.lua'),          'MINI config')
+nmap_leader('em', edit_plugin_file('50_mini.lua'),          'MINI config')
 nmap_leader('en', '<Cmd>lua MiniNotify.show_history()<CR>', 'Notifications')
 nmap_leader('eo', edit_plugin_file('10_options.lua'),       'Options config')
-nmap_leader('ep', edit_plugin_file('40_plugins.lua'),       'Plugins config')
+nmap_leader('ep', edit_plugin_file('60_plugins.lua'),       'Plugins config')
 nmap_leader('eq', explore_quickfix,                         'Quickfix')
 
 -- f is for 'Fuzzy Find'.
@@ -169,13 +169,19 @@ nmap_leader('md', '<cmd>lcd %:p:h<cr>', 'Local cd to file')
 nmap_leader('ml', "'L", 'Lian')
 
 -- o is for 'Obsidian'.
-nmap_leader('oz', '<Cmd>lua MiniMisc.zoom()<CR>',          'Zoom toggle')
+nmap_leader('oz', '<Cmd>lua MiniMisc.zoom()<CR>',        'Zoom toggle')
 nmap_leader('on', '<cmd>Obsidian new_from_template<cr>', 'New note')
 nmap_leader('os', '<cmd>Obsidian search<cr>',            'Search notes')
 nmap_leader('or', '<cmd>Obsidian rename<cr>',            'Rename note')
 nmap_leader('ot', '<cmd>Obsidian tags<cr>',              'Search tags')
 nmap_leader('ob', '<cmd>Obsidian backlinks<cr>',         'Backlinks')
 nmap_leader('of', '<cmd>Obsidian quick_switch<cr>',      'Open note')
+nmap_leader('od', function()
+  local today = os.date('*t').wday
+  local friday = 6
+  local offset = (friday - today) % 7
+  vim.cmd('Obsidian today ' .. offset)
+end, 'Open weekly note')
 -- TODO do I have to adjust this based on my adjusted session.vim file?
 nmap_leader('oW',
       function()
