@@ -506,3 +506,7 @@ nmap('<m-l>', '<cmd>bnext<cr>', 'Next buffer')
 nmap('<m-h>', '<cmd>bprev<cr>', 'Prev buffer')
 nmap('<m-b>', '<Cmd>b#<CR>', 'Alternate buffer')
 nmap('<m-x>', '<cmd>lua MiniBufremove.delete()<cr>', 'Delete buffer')
+
+-- remapping indent in visual mode to reselect
+vim.keymap.set('v', '>', '>gv')
+vim.keymap.set('v', '<', '<gv')
