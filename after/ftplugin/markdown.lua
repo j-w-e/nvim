@@ -196,3 +196,11 @@ vim.keymap.set(
   -- ':write! /tmp/temp.md | silent !pandoc /tmp/temp.md -f markdown -t html -o /tmp/temp.html && open /tmp/temp.html &<CR>',
   { noremap = true, silent = true }
 )
+
+-- -- highlighting for dashes
+-- vim.api.nvim_set_hl(0, 'Hyphen', { fg = '#565f89' }) -- subtle
+-- vim.api.nvim_set_hl(0, 'EnDash', { fg = '#bb9af7' }) -- blue
+vim.api.nvim_set_hl(0, 'EmDash', { fg = '#bb9af7', bold = true }) -- purple
+-- vim.fn.matchadd('Hyphen', '-')
+-- vim.fn.matchadd('EnDash', '–')
+vim.fn.matchadd('EmDash', '—')
