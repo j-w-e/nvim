@@ -50,18 +50,15 @@ end, 'Update from disk')
 -- ignores yaml frontmatter
 local function replace_markdown_bullets()
   local bufnr = vim.api.nvim_get_current_buf()
-  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-
   local bullets = { '-', '*', '+' }
   local indent_width = vim.bo[bufnr].shiftwidth
-
-  -- capture: indentation, bullet, space(s), content
   local pattern = '^(%s*)([%*%-%+])(%s+)(.*)$'
+
+  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
 
   local in_yaml = false
 
   for i, line in ipairs(lines) do
-    -- Detect YAML front matter
     if i == 1 and line:match('^%-%-%-$') then
       in_yaml = true
       goto continue
@@ -74,20 +71,22 @@ local function replace_markdown_bullets()
       goto continue
     end
 
-    -- Normal markdown bullet handling
     local indent, _, space, content = line:match(pattern)
     if indent then
       local spaces = #indent
       local level = math.floor(spaces / indent_width)
       local bullet = bullets[(level % #bullets) + 1]
 
-      lines[i] = indent .. bullet .. space .. content
+      local new_line = indent .. bullet .. space .. content
+
+      -- ✅ only update if actually changed
+      if new_line ~= line then
+        vim.api.nvim_buf_set_lines(bufnr, i - 1, i, false, { new_line })
+      end
     end
 
     ::continue::
   end
-
-  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
 end
 
 Config.new_autocmd('BufWritePre', '*.md', function(o)
