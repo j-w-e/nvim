@@ -1,11 +1,14 @@
 -- Load blink first, as otherwise it has difficulty picking up obsidan when opening sessions
 
 -- Make concise helpers for installing/adding plugins in two stages
-local add, later, now = MiniDeps.add, MiniDeps.later, MiniDeps.now
-now(function()
-  add({ source = 'saghen/blink.cmp', checkout = 'v1.8.0' })
-  add('obsidian-nvim/obsidian.nvim')
-end)
+local add = vim.pack.add
+local now, now_if_args, later = Config.now, Config.now_if_args, Config.later
+
+add({
+  { src = 'https://github.com/saghen/blink.cmp', version = 'v1.8.0' },
+  { src = 'https://github.com/obsidian-nvim/obsidian.nvim' },
+})
+-- add()
 
 if Config.conf_ver == 'notes' then
   now(function()
@@ -171,7 +174,7 @@ if Config.conf_ver == 'notes' then
 end
 
 now(function()
-  add('MeanderingProgrammer/render-markdown.nvim')
+  add({ { src = 'https://github.com/MeanderingProgrammer/render-markdown.nvim' } })
   require('render-markdown').setup({
     file_types = { 'markdown', 'Rmd', 'quarto' },
     code = {

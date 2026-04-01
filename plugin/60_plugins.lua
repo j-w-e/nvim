@@ -1,24 +1,17 @@
 -- Make concise helpers for installing/adding plugins in two stages
-local add, later = MiniDeps.add, MiniDeps.later
-local now_if_args = Config.now_if_args
+local add = vim.pack.add
+local now, now_if_args, later = Config.now, Config.now_if_args, Config.later
 
 -- Tree-sitter ================================================================
 
 now_if_args(function()
+  local ts_update = function()
+    vim.cmd('TSUpdate')
+  end
+  Config.on_packchanged('nvim-treesitter', { 'update' }, ts_update, ':TSUpdate')
   add({
-    source = 'nvim-treesitter/nvim-treesitter',
-    -- Update tree-sitter parser after plugin is updated
-    hooks = {
-      post_checkout = function()
-        vim.cmd('TSUpdate')
-      end,
-    },
-  })
-  add({
-    source = 'nvim-treesitter/nvim-treesitter-textobjects',
-    -- Use `main` branch since `master` branch is frozen, yet still default
-    -- It is needed for compatibility with 'nvim-treesitter' `main` branch
-    checkout = 'main',
+    'https://github.com/nvim-treesitter/nvim-treesitter',
+    'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
   })
 
   -- Define languages which will have parsers installed and auto enabled
@@ -65,7 +58,7 @@ end)
 --
 -- Add it now if file (and not 'mini.starter') is shown after startup.
 now_if_args(function()
-  add('neovim/nvim-lspconfig')
+  add({ 'https://github.com/neovim/nvim-lspconfig' })
   vim.lsp.enable({
     'lua_ls',
   })
@@ -74,7 +67,7 @@ end)
 -- Formatting =================================================================
 
 later(function()
-  add('stevearc/conform.nvim')
+  add({ 'https://github.com/stevearc/conform.nvim' })
 
   require('conform').setup({
     default_format_opts = {
@@ -112,7 +105,7 @@ end)
 -- R ==========================================================================
 
 now_if_args(function()
-  add('R-nvim/R.nvim')
+  add({ 'https://github.com/R-nvim/R.nvim' })
   require('r').setup({
     R_args = { '--quiet', '--no-save' },
     hook = {
@@ -156,16 +149,16 @@ end)
 -- TODO I installed stylua and lua-language-server from brew
 -- It may make more sense to install them from Mason
 -- now_if_args(function()
---   add('mason-org/mason.nvim')
+--   add({ 'https://github.com/mason-org/mason.nvim' })
 --   require('mason').setup()
 -- end)
 
 later(function()
-  add('numToStr/FTerm.nvim')
+  add({ 'https://github.com/numToStr/FTerm.nvim' })
 end)
 
 later(function()
-  add('folke/flash.nvim')
+  add({ 'https://github.com/folke/flash.nvim' })
   require('flash').setup({
     labels = 'enaiohtsrluypfwmdgc',
     search = { mode = 'search' },
@@ -184,7 +177,7 @@ later(function()
 end)
 
 later(function()
-  add('nat-418/boole.nvim')
+  add({ 'https://github.com/nat-418/boole.nvim' })
   require('boole').setup({
     mappings = {
       increment = '<C-a>',
@@ -194,25 +187,25 @@ later(function()
 end)
 
 later(function()
-  add('samjwill/nvim-unception')
+  add({ 'https://github.com/samjwill/nvim-unception' })
   Config.new_autocmd('User', 'UnceptionEditRequestReceived', function()
     require('FTerm').toggle()
   end, 'Close FTerm on vimception')
 end)
 
 later(function()
-  add('romainl/vim-cool')
+  add({ 'https://github.com/romainl/vim-cool' })
 end)
 
 later(function()
-  add('folke/zen-mode.nvim')
+  add({ 'https://github.com/folke/zen-mode.nvim' })
   require('zen-mode').setup({
     window = { width = 150 },
   })
 end)
 
 later(function()
-  add('folke/todo-comments.nvim')
+  add({ 'https://github.com/folke/todo-comments.nvim' })
   require('todo-comments').setup({
     signs = true, -- show icons in the signs column
     sign_priority = 8, -- sign priority
@@ -239,7 +232,10 @@ later(function()
 end)
 
 later(function()
-  add({ source = 'chrishrb/gx.nvim', depends = { 'nvim-lua/plenary.nvim' } })
+  add({
+    'https://github.com/nvim-lua/plenary.nvim',
+    'https://github.com/chrishrb/gx.nvim',
+  })
   require('gx').setup({
     select_prompt = false,
     handlers = {
@@ -249,7 +245,7 @@ later(function()
 end)
 
 later(function()
-  add('gaodean/autolist.nvim')
+  add({ 'https://github.com/gaodean/autolist.nvim' })
   local list_patterns = {
     unordered = '[-+*]', -- - + *
     digit = '%d+[.)]', -- 1. 2. 3.
@@ -289,7 +285,7 @@ later(function()
 end)
 
 later(function()
-  add('rlychrisg/keepcursor.nvim')
+  add({ 'https://github.com/rlychrisg/keepcursor.nvim' })
   require('keepcursor').setup({
     enabled_on_start_v = 'middle', -- options are "top", "middle" and "bottom".
     enabled_on_start_h = 'none', -- options are "left" and "right".
@@ -297,7 +293,7 @@ later(function()
 end)
 
 later(function()
-  add('Aasim-A/scrollEOF.nvim')
+  add({ 'https://github.com/Aasim-A/scrollEOF.nvim' })
   require('scrollEOF').setup({
     floating = false,
     insert_mode = true,
@@ -305,7 +301,7 @@ later(function()
 end)
 
 later(function()
-  add('mawkler/demicolon.nvim')
+  add({ 'https://github.com/mawkler/demicolon.nvim' })
   require('demicolon').setup({
     keymaps = {
       horizontal_motions = false,
@@ -395,6 +391,6 @@ later(function()
 end)
 
 -- later(function()
---     add('hat0uma/csvview.nvim')
+--     add({ 'https://github.com/hat0uma/csvview.nvim' })
 --     require('csvview').setup()
 -- end)

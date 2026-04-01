@@ -9,6 +9,8 @@
 
 --[[ TODO list
 1. Again try to implement a todo picker for the currrent file
+    Currently, <leader>t runs a custom MiniPick picker, which returns both the filename and the line. But as soon as I start filtering, the file name gets separated from the line
+    Otherwise, <leader>ft runs a standard MiniPick picker on the current file, with TODO pre-filled in the search. I have to manually type <c-space> to then refine
 2. Adjust the keepcursor autocommand to not operate in MiniFiles?
 4. Find out why following an obsidian link does not re-open file at last edited point
 5. Decide if I want <leader>, or <c-,> to open FTerm
@@ -22,26 +24,24 @@
 13. Make unception work. Currently, it just closes the terminal buffer
 ]]
 --
--- Bootstrap 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
-local mini_path = vim.fn.stdpath('data') .. '/site/pack/deps/start/mini.nvim'
-if not vim.loop.fs_stat(mini_path) then
-  vim.cmd('echo "Installing `mini.nvim`" | redraw')
-  local origin = 'https://github.com/nvim-mini/mini.nvim'
-  local clone_cmd = { 'git', 'clone', '--filter=blob:none', origin, mini_path }
-  vim.fn.system(clone_cmd)
-  vim.cmd('packadd mini.nvim | helptags ALL')
-  vim.cmd('echo "Installed `mini.nvim`" | redraw')
-end
-
--- Plugin manager. Set up immediately for `now()`/`later()` helpers.
--- Example usage:
--- - `MiniDeps.add('...')` - use inside config to add a plugin
--- - `:DepsUpdate` - update all plugins
--- - `:DepsSnapSave` - save a snapshot of currently active plugins
-require('mini.deps').setup()
+vim.pack.add({ 'https://github.com/nvim-mini/mini.nvim' })
 
 -- Define config table to be able to pass data between scripts
 _G.Config = {}
+local misc = require('mini.misc')
+Config.now = function(f)
+  misc.safely('now', f)
+end
+Config.later = function(f)
+  misc.safely('later', f)
+end
+Config.now_if_args = vim.fn.argc(-1) > 0 and Config.now or Config.later
+Config.on_event = function(ev, f)
+  misc.safely('event:' .. ev, f)
+end
+Config.on_filetype = function(ft, f)
+  misc.safely('filetype:' .. ft, f)
+end
 
 -- Define custom autocommand group and helper to create an autocommand.
 local gr = vim.api.nvim_create_augroup('custom-config', {})
@@ -50,8 +50,18 @@ Config.new_autocmd = function(event, pattern, callback, desc)
   vim.api.nvim_create_autocmd(event, opts)
 end
 
--- Some plugins and 'mini.nvim' modules only need setup during startup if Neovim
--- is started like `nvim -- path/to/file`, otherwise delaying setup is fine
-Config.now_if_args = vim.fn.argc(-1) > 0 and MiniDeps.now or MiniDeps.later
+Config.on_packchanged = function(plugin_name, kinds, callback, desc)
+  local f = function(ev)
+    local name, kind = ev.data.spec.name, ev.data.kind
+    if not (name == plugin_name and vim.tbl_contains(kinds, kind)) then
+      return
+    end
+    if not ev.data.active then
+      vim.cmd.packadd(plugin_name)
+    end
+    callback()
+  end
+  Config.new_autocmd('PackChanged', '*', f, desc)
+end
 
 Config.conf_ver = vim.fn.getenv('NVIM_PROFILE')

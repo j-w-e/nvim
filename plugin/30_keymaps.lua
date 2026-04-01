@@ -6,8 +6,8 @@ end
 
 -- Paste linewise before/after current line
 -- Usage: `yiw` to yank a word and `]p` to put it on the next line.
-nmap('[p', '<Cmd>exe "put! " . v:register<CR>', 'Paste Above')
-nmap(']p', '<Cmd>exe "put "  . v:register<CR>', 'Paste Below')
+nmap('[p', '<Cmd>exe "iput! " . v:register<CR>', 'Paste Above')
+nmap(']p', '<Cmd>exe "iput "  . v:register<CR>', 'Paste Below')
 
 -- Flash keymaps
 vim.keymap.set({ 'n', 'x', 'o' }, '-', function()
@@ -380,7 +380,7 @@ nmap_leader('vl', '<Cmd>lua MiniVisits.add_label()<CR>',          'Add label')
 nmap_leader('vL', '<Cmd>lua MiniVisits.remove_label()<CR>',       'Remove label')
 
 nmap_leader('vs', '<cmd>lua MiniStarter.open()<cr>', 'Show start screen')
-nmap_leader('vu', MiniDeps.update, 'Deps update')
+-- nmap_leader('vu', Config.update, 'Deps update')
 
 -- x is for 'eXit'
 nmap_leader('x', '<cmd>q<cr>', 'Quit')
