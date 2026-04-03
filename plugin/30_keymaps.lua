@@ -212,15 +212,22 @@ nmap_leader('sr', '<Cmd>lua MiniSessions.select("read")<CR>',   'Read')
 nmap_leader('sw', '<Cmd>lua MiniSessions.write()<CR>',          'Write current')
 
 -- t is for 'TODOS'
-local function find_todos()
-  local result = vim.system({ 'rg', '--json', 'TODO' }, { text = true }):wait()
 
+-- Find TODOs in a file or directory
+local function find_todos(path)
+  local cmd = { 'rg', '--json', 'TODO' }
+
+  if path then
+    local abs_path = vim.fn.fnamemodify(path, ':p') -- absolute path for safety
+    table.insert(cmd, abs_path)
+  end
+
+  local result = vim.system(cmd, { text = true }):wait()
   if result.code ~= 0 and result.code ~= 1 then
     error('rg failed: ' .. (result.stderr or ''))
   end
 
   local items = {}
-
   for line in result.stdout:gmatch('[^\r\n]+') do
     local ok, event = pcall(vim.json.decode, line)
     if ok and (event.type == 'match' or event.type == 'begin') then
@@ -234,40 +241,38 @@ local function find_todos()
           table.insert(items, {
             path = path,
             lnum = lnum,
-            original = original, -- keep raw text
-            col = (sub.start or 0) + 1, -- 1-based
+            original = original,
+            col = (sub.start or 0) + 1,
             match_len = (sub['end'] or sub.start) - (sub.start or 0),
           })
         end
-      elseif event.type == 'begin' then
-        table.insert(items, {
-          path = event.data.path.text,
-          lnum = 0,
-          original = ' ',
-          col = 0,
-          match_len = 0,
-        })
       end
     end
   end
 
-  -- Sort: reverse by filename, then ascending line number
+  -- Sort: ascending by path, then line, then column
   table.sort(items, function(a, b)
     if a.path ~= b.path then
-      return a.path < b.path -- reverse alphabetical
-    elseif a.lnum ~= b.lnum then
-      return a.lnum < b.lnum -- ascending line number
-    else
-      return a.col < b.col -- ascending column number, if there are two per line
+      return a.path < b.path
     end
+    if a.lnum ~= b.lnum then
+      return a.lnum < b.lnum
+    end
+    return a.col < b.col
   end)
+
   return items
 end
 
-local function pick_todos()
+-- Picker
+local function pick_todos(opts)
+  opts = opts or {}
+  local path = opts.path
+  local hide_path = path ~= nil -- hide path if searching a single file
+
   local MiniPick = require('mini.pick')
   local ns = vim.api.nvim_create_namespace('todo_picker')
-  local items = find_todos()
+  local items = find_todos(path)
 
   MiniPick.start({
     source = {
@@ -277,7 +282,6 @@ local function pick_todos()
       show = function(buf_id, items_to_show)
         local lines = {}
 
-        -- Precompute display text and adjusted TODO column
         for _, item in ipairs(items_to_show) do
           local trimmed = vim.trim(item.original)
           local leading_ws = item.original:match('^%s*') or ''
@@ -286,69 +290,64 @@ local function pick_todos()
           item._display_text = trimmed
           item._adjusted_col = adjusted_col > 0 and adjusted_col or nil
 
-          local line = string.format('%s:%d:%d: %s', item.path, item.lnum, item.col, trimmed)
-          table.insert(lines, line)
+          if hide_path then
+            item._display_line = string.format('%d:%d: %s', item.lnum, item.col, trimmed)
+            item._offset_path = 0
+            item._offset_lnum = 0
+            item._offset_col = #tostring(item.lnum) + 1
+            item._offset_text = item._offset_col + #tostring(item.col) + 2
+          else
+            item._display_line = string.format('%s:%d:%d: %s', item.path, item.lnum, item.col, trimmed)
+            item._offset_path = 0
+            item._offset_lnum = #item.path + 1
+            item._offset_col = item._offset_lnum + #tostring(item.lnum) + 1
+            item._offset_text = item._offset_col + #tostring(item.col) + 2
+          end
+
+          table.insert(lines, item._display_line)
         end
 
         -- Render lines
         vim.api.nvim_buf_set_lines(buf_id, 0, -1, false, lines)
         vim.api.nvim_buf_clear_namespace(buf_id, ns, 0, -1)
 
-        -- Apply highlights using extmarks
+        -- Apply highlights
         for i, item in ipairs(items_to_show) do
           local row = i - 1
-          local path = item.path
-          local lnum = tostring(item.lnum)
-          local col = tostring(item.col)
-          local text = item._display_text
+          local hl_path = 'Directory'
+          local hl_lnum = 'Comment'
+          local hl_col = 'LineNr'
+          local hl_text = 'Normal'
+          local hl_match = 'TodoFgTODO'
 
-          local path_start, path_end = 0, #path
-          local lnum_start, lnum_end = path_end, path_end + 1 + #lnum
-          local col_start, col_end = lnum_end, lnum_end + 2 + #col
-          local text_start, text_end = col_end + 1, col_end + 1 + #text
+          if not hide_path then
+            vim.api.nvim_buf_set_extmark(buf_id, ns, row, item._offset_path, {
+              end_col = item._offset_lnum - 1,
+              hl_group = hl_path,
+              hl_mode = 'combine',
+            })
+          end
 
-          -- Choose highlight groups depending on header vs match
-          local is_header = item.lnum == 0
-
-          -- stylua: ignore start
-          local hl_path  = is_header and 'Comment' or 'Directory'
-          local hl_lnum  = is_header and 'LineNr'  or 'Comment'
-          local hl_col   = is_header and 'LineNr'  or 'LineNr'
-          local hl_text  = is_header and 'Special' or 'Normal'
-          local hl_match = is_header and nil       or 'MiniHipatternsTodo'
-          -- stylua: ignore end
-
-          -- filename
-          vim.api.nvim_buf_set_extmark(buf_id, ns, row, path_start, {
-            end_col = path_end,
-            hl_group = hl_path,
-            hl_mode = 'combine',
-          })
-
-          -- line number
-          vim.api.nvim_buf_set_extmark(buf_id, ns, row, lnum_start, {
-            end_col = lnum_end,
+          vim.api.nvim_buf_set_extmark(buf_id, ns, row, item._offset_lnum, {
+            end_col = item._offset_col,
             hl_group = hl_lnum,
             hl_mode = 'combine',
           })
 
-          -- column number
-          vim.api.nvim_buf_set_extmark(buf_id, ns, row, col_start, {
-            end_col = col_end,
+          vim.api.nvim_buf_set_extmark(buf_id, ns, row, item._offset_col, {
+            end_col = item._offset_text,
             hl_group = hl_col,
             hl_mode = 'combine',
           })
 
-          -- text
-          vim.api.nvim_buf_set_extmark(buf_id, ns, row, text_start, {
-            end_col = text_end,
+          vim.api.nvim_buf_set_extmark(buf_id, ns, row, item._offset_text, {
+            end_col = item._offset_text + #item._display_text,
             hl_group = hl_text,
             hl_mode = 'combine',
           })
 
-          -- TODO submatch (only for real matches)
           if hl_match and item._adjusted_col then
-            local match_start = text_start + (item._adjusted_col - 1)
+            local match_start = item._offset_text + (item._adjusted_col - 1)
             local match_end = match_start + (item.match_len or 4)
             vim.api.nvim_buf_set_extmark(buf_id, ns, row, match_start, {
               end_col = match_end,
@@ -362,6 +361,9 @@ local function pick_todos()
   })
 end
 nmap_leader('t', pick_todos, 'TODO picker')
+nmap_leader('ft', function()
+  pick_todos({ path = vim.api.nvim_buf_get_name(0) })
+end, 'TODO picker (current file)')
 
 -- v is for 'Visits' or 'Vim'.
 local make_pick_core = function(cwd, desc)

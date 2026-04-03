@@ -8,9 +8,6 @@
 --]]
 
 --[[ TODO list
-1. Again try to implement a todo picker for the currrent file
-    Currently, <leader>t runs a custom MiniPick picker, which returns both the filename and the line. But as soon as I start filtering, the file name gets separated from the line
-    Otherwise, <leader>ft runs a standard MiniPick picker on the current file, with TODO pre-filled in the search. I have to manually type <c-space> to then refine
 2. Adjust the keepcursor autocommand to not operate in MiniFiles?
 4. Find out why following an obsidian link does not re-open file at last edited point
 5. Decide if I want <leader>, or <c-,> to open FTerm
