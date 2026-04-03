@@ -33,10 +33,6 @@
       "rev": "fcea7ff883235d9024dc41e638f164a450c14ca2",
       "src": "https://github.com/folke/flash.nvim"
     },
-    "gx.nvim": {
-      "rev": "ba9c408fc0130fc4548760c3933a81b58fc50de8",
-      "src": "https://github.com/chrishrb/gx.nvim"
-    },
     "keepcursor.nvim": {
       "rev": "e54c64f827d450b23897299df8556e6be4abbec1",
       "src": "https://github.com/rlychrisg/keepcursor.nvim"

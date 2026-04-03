@@ -232,19 +232,6 @@ later(function()
 end)
 
 later(function()
-  add({
-    'https://github.com/nvim-lua/plenary.nvim',
-    'https://github.com/chrishrb/gx.nvim',
-  })
-  require('gx').setup({
-    select_prompt = false,
-    handlers = {
-      search = false,
-    },
-  })
-end)
-
-later(function()
   add({ 'https://github.com/gaodean/autolist.nvim' })
   local list_patterns = {
     unordered = '[-+*]', -- - + *
@@ -290,6 +277,65 @@ later(function()
     enabled_on_start_v = 'middle', -- options are "top", "middle" and "bottom".
     enabled_on_start_h = 'none', -- options are "left" and "right".
   })
+  local keepcursor_state = {
+    mode = nil, -- "top" | "mid" | "bot"
+  }
+
+  -- Helper: extract mode from KeepCursorStatus()
+  local function get_keepcursor_mode()
+    local ok, status = pcall(vim.fn.KeepCursorStatus)
+    if not ok or type(status) ~= 'string' then
+      return nil
+    end
+
+    status = status:lower()
+
+    if status:find('top') then
+      return 'top'
+    elseif status:find('mid') then
+      return 'mid'
+    elseif status:find('bot') then
+      return 'bot'
+    end
+
+    return nil
+  end
+
+  -- Helper: restore mode
+  local function restore_keepcursor(mode)
+    if mode == 'top' then
+      vim.cmd('ToggleCursorTop')
+    elseif mode == 'mid' then
+      vim.cmd('ToggleCursorMid')
+    elseif mode == 'bot' then
+      vim.cmd('ToggleCursorBot')
+    end
+  end
+
+  -- Enter mini.files → save + disable
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'minifiles',
+    callback = function()
+      keepcursor_state.mode = get_keepcursor_mode()
+
+      -- Disable keepcursor (usually toggle command)
+      vim.cmd('DisableKeepCursor')
+    end,
+  })
+
+  -- Leave mini.files → restore
+  vim.api.nvim_create_autocmd('BufLeave', {
+    callback = function(args)
+      if vim.bo[args.buf].filetype ~= 'minifiles' then
+        return
+      end
+
+      if keepcursor_state.mode then
+        restore_keepcursor(keepcursor_state.mode)
+        keepcursor_state.mode = nil
+      end
+    end,
+  })
 end)
 
 later(function()
@@ -297,6 +343,7 @@ later(function()
   require('scrollEOF').setup({
     floating = false,
     insert_mode = true,
+    disabled_filetypes = { 'minifiles' },
   })
 end)
 
