@@ -111,7 +111,7 @@ vim.keymap.set('n', 'O', 'O<cmd>AutolistNewBulletBefore<cr>', { buffer = 0 })
 vim.keymap.set('n', '<C-r>', '<cmd>AutolistRecalculate<cr>', { buffer = 0 })
 
 -- functions to recalculate list on edit
-vim.keymap.set('n', '>>', function()
+function _G.header_or_list_indent_callback()
   local line = vim.api.nvim_get_current_line()
   if line:match('^#') then
     -- Add an extra # at the start of the line
@@ -121,8 +121,13 @@ vim.keymap.set('n', '>>', function()
     vim.cmd('normal! >>')
     vim.cmd('AutolistRecalculate')
   end
-end, { noremap = true, silent = true })
-vim.keymap.set('n', '<<', function()
+end
+function _G.header_or_list_indent()
+  vim.go.operatorfunc = 'v:lua.header_or_list_indent_callback'
+  return 'g@l'
+end
+
+function _G.header_or_list_dedent_callback()
   local line = vim.api.nvim_get_current_line()
   -- Match leading #'s
   local hashes = line:match('^(#+)')
@@ -137,7 +142,15 @@ vim.keymap.set('n', '<<', function()
     vim.cmd('normal! <<')
     vim.cmd('AutolistRecalculate')
   end
-end, { noremap = true, silent = true })
+end
+function _G.header_or_list_dedent()
+  vim.go.operatorfunc = 'v:lua.header_or_list_dedent_callback'
+  return 'g@l'
+end
+
+vim.keymap.set('n', '>>', header_or_list_indent, { expr = true })
+vim.keymap.set('n', '<<', header_or_list_dedent, { expr = true })
+
 -- vim.keymap.set('n', 'dd', 'dd<cmd>AutolistRecalculate<cr>', { buffer = 0 })
 vim.keymap.set('n', 'dd', function()
   if vim.fn.getline('.') == '' then
