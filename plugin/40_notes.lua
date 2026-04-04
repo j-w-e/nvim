@@ -7,8 +7,8 @@ local now, now_if_args, later = Config.now, Config.now_if_args, Config.later
 add({
   { src = 'https://github.com/saghen/blink.cmp', version = 'v1.8.0' },
   { src = 'https://github.com/obsidian-nvim/obsidian.nvim' },
+  { src = 'https://github.com/folke/snacks.nvim' },
 })
--- add()
 
 if Config.conf_ver == 'notes' then
   now(function()
@@ -70,6 +70,12 @@ if Config.conf_ver == 'notes' then
         nvim_cmp = false,
         blink = true,
         create_new = true,
+      },
+      picker = {
+        name = 'snacks.pick',
+        note_mappings = {
+          insert_link = '<c-k>',
+        },
       },
       workspaces = {
         {
@@ -169,6 +175,34 @@ if Config.conf_ver == 'notes' then
       -- vim.fn.jobstart({ 'open', url }) -- Mac OS
       -- vim.ui.open(url) -- need Neovim 0.10.0+
       -- end,
+    })
+  end)
+
+  now(function()
+    require('snacks').setup({
+      picker = {
+        enabled = true,
+        layout = {
+          cycle = true,
+          preset = function()
+            return vim.o.columns >= 220 and 'default' or 'vertical'
+          end,
+          layout = {
+            width = 0.8,
+          },
+        },
+      },
+      bigfile = { enabled = false },
+      dashboard = { enabled = false },
+      explorer = { enabled = false },
+      indent = { enabled = false },
+      input = { enabled = false },
+      notifier = { enabled = false },
+      quickfile = { enabled = false },
+      scope = { enabled = false },
+      scroll = { enabled = false },
+      statuscolumn = { enabled = false },
+      words = { enabled = false },
     })
   end)
 end
