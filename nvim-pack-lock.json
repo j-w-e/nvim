@@ -54,7 +54,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
     },
     "nvim-unception": {
-      "rev": "df0e505f0f1371c49c2bcf993985962edb5a279d",
+      "rev": "59f9f64a7ff4c7f853d3d1a941132648059fc799",
       "src": "https://github.com/samjwill/nvim-unception"
     },
     "obsidian.nvim": {
@@ -76,6 +76,10 @@
     "snacks.nvim": {
       "rev": "ad9ede6a9cddf16cedbd31b8932d6dcdee9b716e",
       "src": "https://github.com/folke/snacks.nvim"
+    },
+    "tiny-cmdline.nvim": {
+      "rev": "807d23bcb7cdf26da9e92c5ea5299e7f0d07383d",
+      "src": "https://github.com/rachartier/tiny-cmdline.nvim"
     },
     "todo-comments.nvim": {
       "rev": "31e3c38ce9b29781e4422fc0322eb0a21f4e8668",

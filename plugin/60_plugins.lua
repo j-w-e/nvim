@@ -186,12 +186,13 @@ later(function()
   })
 end)
 
-later(function()
-  add({ 'https://github.com/samjwill/nvim-unception' })
-  Config.new_autocmd('User', 'UnceptionEditRequestReceived', function()
-    require('FTerm').toggle()
-  end, 'Close FTerm on vimception')
-end)
+-- TODO make this work. It seems to have broken for nvim 0.12
+-- later(function()
+--   add({ 'https://github.com/samjwill/nvim-unception' })
+--   Config.new_autocmd('User', 'UnceptionEditRequestReceived', function()
+--     require('FTerm').toggle()
+--   end, 'Close FTerm on vimception')
+-- end)
 
 later(function()
   add({ 'https://github.com/romainl/vim-cool' })
@@ -441,3 +442,15 @@ end)
 --     add({ 'https://github.com/hat0uma/csvview.nvim' })
 --     require('csvview').setup()
 -- end)
+
+later(function()
+  add({ 'https://github.com/rachartier/tiny-cmdline.nvim' })
+  vim.o.cmdheight = 0
+  require('vim._core.ui2').enable({})
+  require('tiny-cmdline').setup({
+    position = {
+      y = '30%',
+    },
+    native_types = {},
+  })
+end)
