@@ -43,10 +43,6 @@ now_if_args(function()
 
   -- Restore latest cursor position on file open
   MiniMisc.setup_restore_cursor()
-
-  -- Synchronize terminal emulator background with Neovim's background to remove
-  -- possibly different color padding around Neovim instance
-  MiniMisc.setup_termbg_sync()
 end)
 
 -- Notifications provider. Shows all kinds of notifications in the upper right
@@ -97,54 +93,69 @@ end
 now(function()
   -- The following code is an attempt to get lsp and formatter to display in the status line.
   -- It comes from this comment https://www.reddit.com/r/neovim/comments/xtynan/comment/iqtcq0s/?utm_source=share&utm_medium=web2x&context=3
-  Lsp =
-    function()
-      local buf_clients = vim.lsp.get_clients({ bufnr = 0 })
-      -- local supported_formatters = require("null-ls.sources").get_available(vim.bo.filetype)
-      local clients = {}
+  Lsp = function()
+    local buf_clients = vim.lsp.get_clients({ bufnr = 0 })
+    -- local supported_formatters = require("null-ls.sources").get_available(vim.bo.filetype)
+    local clients = {}
 
-      for _, client in pairs(buf_clients) do
-        if client.name ~= 'null-ls' then
-          table.insert(clients, client.name)
-        end
+    for _, client in pairs(buf_clients) do
+      if client.name ~= 'null-ls' then
+        table.insert(clients, client.name)
       end
+    end
 
-      -- for _, client in pairs(supported_formatters) do
-      --   table.insert(clients, client.name)
-      -- end
+    -- for _, client in pairs(supported_formatters) do
+    --   table.insert(clients, client.name)
+    -- end
 
-      if #clients > 0 then
-        return table.concat(clients, ', ')
-      else
-        return 'no LS'
-      end
-    end, require('mini.statusline').setup({
-      content = {
-        active = function()
-          local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
-          local git = MiniStatusline.section_git({ trunc_width = 75 })
-          local diagnostics = MiniStatusline.section_diagnostics({ trunc_width = 75 })
-          local filename = MiniStatusline.section_filename({ trunc_width = 140 })
-          local fileinfo = MiniStatusline.section_fileinfo({ trunc_width = 120 })
-          local location = MiniStatusline.section_location({ trunc_width = 75 })
-          local lsp = Lsp()
-          -- local noice_mode = require('noice').api.status.mode.get_hl()
+    if #clients > 0 then
+      return table.concat(clients, ', ')
+    else
+      return 'no LS'
+    end
+  end
+  Location = function(args)
+    local location = MiniStatusline.section_location(args)
 
-          return MiniStatusline.combine_groups({
-            { hl = mode_hl, strings = { mode } },
-            { hl = 'MiniStatuslineDevinfo', strings = { git, diagnostics } },
-            '%<', -- Mark general truncate point
-            { hl = 'MiniStatuslineFilename', strings = { filename } },
-            '%=', -- End left alignment
-            -- { hl = 'MiniStatuslineFileinfo', strings = { noice_cmd, noice_mode } },
-            -- { hl = 'MiniStatuslineFileinfo', strings = { noice_mode } },
-            { hl = 'MiniStatuslineFilename', strings = { lsp } },
-            { hl = 'MiniStatuslineFileinfo', strings = { fileinfo } },
-            { hl = mode_hl, strings = { location } },
-          })
-        end,
-      },
-    })
+    -- Add "L" before the current line (%l)
+    location = location:gsub('%%l', 'L%%l', 1)
+
+    -- Add "C" before the column part:
+    -- Prefer %v / %2v if present, otherwise fall back to %{...}
+    if location:find('%%[%d]*v') then
+      location = location:gsub('(%%[%d]*v)', 'C%1', 1)
+    else
+      -- Match expression column like %-2{virtcol("$") - 1}
+      location = location:gsub('(%%%-?%d*%b{})', 'C%1', 1)
+    end
+
+    return location
+  end
+  require('mini.statusline').setup({
+    content = {
+      active = function()
+        local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
+        local git = MiniStatusline.section_git({ trunc_width = 75 })
+        local diagnostics = MiniStatusline.section_diagnostics({ trunc_width = 75 })
+        local filename = MiniStatusline.section_filename({ trunc_width = 140 })
+        local fileinfo = MiniStatusline.section_fileinfo({ trunc_width = 120 })
+        local location = Location({ trunc_width = 120 })
+        -- local location = MiniStatusline.section_location({ trunc_width = 75 })
+        local lsp = Lsp()
+
+        return MiniStatusline.combine_groups({
+          { hl = mode_hl, strings = { mode } },
+          { hl = 'MiniStatuslineDevinfo', strings = { git, diagnostics } },
+          '%<', -- Mark general truncate point
+          { hl = 'MiniStatuslineFilename', strings = { filename } },
+          '%=', -- End left alignment
+          { hl = 'MiniStatuslineFilename', strings = { lsp } },
+          { hl = 'MiniStatuslineFileinfo', strings = { fileinfo } },
+          { hl = mode_hl, strings = { location } },
+        })
+      end,
+    },
+  })
 end)
 
 -- Tabline.
