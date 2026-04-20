@@ -138,6 +138,7 @@ now(function()
         local location = Location({ trunc_width = 120 })
         -- local location = MiniStatusline.section_location({ trunc_width = 75 })
         local lsp = Lsp()
+        local lsp_mini = MiniStatusline.section_lsp({ trunc_width = 75 })
 
         return MiniStatusline.combine_groups({
           { hl = mode_hl, strings = { mode } },
@@ -145,7 +146,7 @@ now(function()
           '%<', -- Mark general truncate point
           { hl = 'MiniStatuslineFilename', strings = { filename } },
           '%=', -- End left alignment
-          { hl = 'MiniStatuslineFilename', strings = { lsp } },
+          { hl = 'MiniStatuslineFilename', strings = { lsp_mini, lsp } },
           { hl = 'MiniStatuslineFileinfo', strings = { fileinfo } },
           { hl = mode_hl, strings = { location } },
         })
