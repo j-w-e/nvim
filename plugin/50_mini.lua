@@ -114,22 +114,18 @@ now(function()
       return 'no LS'
     end
   end
+  -- duplicates the MiniStatusline.location() function, but adds
+  -- L and C before the rows and cols, since I always forget which
+  -- order they come in
   Location = function(args)
-    local location = MiniStatusline.section_location(args)
-
-    -- Add "L" before the current line (%l)
-    location = location:gsub('%%l', 'L%%l', 1)
-
-    -- Add "C" before the column part:
-    -- Prefer %v / %2v if present, otherwise fall back to %{...}
-    if location:find('%%[%d]*v') then
-      location = location:gsub('(%%[%d]*v)', 'C%1', 1)
-    else
-      -- Match expression column like %-2{virtcol("$") - 1}
-      location = location:gsub('(%%%-?%d*%b{})', 'C%1', 1)
+    -- Use virtual column number to allow update when past last column
+    if MiniStatusline.is_truncated(args.trunc_width) then
+      return 'L%l│C%2v'
     end
 
-    return location
+    -- Use `virtcol()` to correctly handle multi-byte characters
+    -- return 'L%l|%L│C%2v|%-2{virtcol("$") - 1}'
+    return 'L%l:%L│C%2v:%-2{virtcol("$") - 1}'
   end
   require('mini.statusline').setup({
     content = {
