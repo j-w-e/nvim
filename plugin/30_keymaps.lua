@@ -148,9 +148,6 @@ nmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>',  'Show at cursor')
 
 xmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>', 'Show at selection')
 
--- k is for 'key'
-nmap_leader('k', '<Cmd>Pick visit_paths cwd=""<CR>',           'Visit paths (all)')
-
 -- l is for 'Language'.
 local formatting_cmd = '<Cmd>lua require("conform").format({lsp_fallback=true})<CR>'
 

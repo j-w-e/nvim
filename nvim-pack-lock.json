@@ -5,7 +5,7 @@
       "src": "https://github.com/numToStr/FTerm.nvim"
     },
     "R.nvim": {
-      "rev": "d63b617f32acb781f20236a5252e01b9996db2a8",
+      "rev": "f3b661df80dd47690a6272ab0e4b9096b731cb08",
       "src": "https://github.com/R-nvim/R.nvim"
     },
     "autolist.nvim": {
@@ -38,7 +38,7 @@
       "src": "https://github.com/rlychrisg/keepcursor.nvim"
     },
     "mini.nvim": {
-      "rev": "3923662bf3d6ca49a9503f8d7196ea0450983e6a",
+      "rev": "18797ed18f347d0d0da27fec28a67979b1207f70",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "nvim-lspconfig": {
@@ -46,7 +46,7 @@
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
-      "rev": "c82bf96f0a773d85304feeb695e1e23b2207ac35",
+      "rev": "4916d6592ede8c07973490d9322f187e07dfefac",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
     "nvim-treesitter-textobjects": {
@@ -58,7 +58,7 @@
       "src": "https://github.com/samjwill/nvim-unception"
     },
     "obsidian.nvim": {
-      "rev": "96a3c296685843882829503aed1cc215bab1c382",
+      "rev": "896d4515a7193676aacf8a95239882397fdd6b27",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim"
     },
     "plenary.nvim": {

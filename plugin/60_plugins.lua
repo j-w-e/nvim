@@ -2,50 +2,6 @@
 local add = vim.pack.add
 local now, now_if_args, later = Config.now, Config.now_if_args, Config.later
 
--- Tree-sitter ================================================================
-
-now_if_args(function()
-  local ts_update = function()
-    vim.cmd('TSUpdate')
-  end
-  Config.on_packchanged('nvim-treesitter', { 'update' }, ts_update, ':TSUpdate')
-  add({
-    'https://github.com/nvim-treesitter/nvim-treesitter',
-    'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
-  })
-
-  -- Define languages which will have parsers installed and auto enabled
-  local languages = {
-    'lua',
-    'vimdoc',
-    'markdown',
-    'markdown_inline',
-    'r',
-    'rnoweb',
-    'yaml',
-    'zsh',
-  }
-  local isnt_installed = function(lang)
-    return #vim.api.nvim_get_runtime_file('parser/' .. lang .. '.*', false) == 0
-  end
-  local to_install = vim.tbl_filter(isnt_installed, languages)
-  if #to_install > 0 then
-    require('nvim-treesitter').install(to_install)
-  end
-
-  -- Enable tree-sitter after opening a file for a target language
-  local filetypes = {}
-  for _, lang in ipairs(languages) do
-    for _, ft in ipairs(vim.treesitter.language.get_filetypes(lang)) do
-      table.insert(filetypes, ft)
-    end
-  end
-  local ts_start = function(ev)
-    vim.treesitter.start(ev.buf)
-  end
-  Config.new_autocmd('FileType', filetypes, ts_start, 'Start tree-sitter')
-end)
-
 -- Language servers ===========================================================
 
 -- Language Server Protocol (LSP) is a set of conventions that power creation of
@@ -99,48 +55,6 @@ later(function()
       end
       return { timeout_ms = 500, lsp_format = 'fallback' }
     end,
-  })
-end)
-
--- R ==========================================================================
-
-now_if_args(function()
-  add({ 'https://github.com/R-nvim/R.nvim' })
-  require('r').setup({
-    R_args = { '--quiet', '--no-save' },
-    hook = {
-      on_filetype = function()
-        local bufmap = function(mode, lhs, rhs, desc)
-          desc = desc or ''
-          vim.api.nvim_buf_set_keymap(0, mode, lhs, rhs, { desc = desc })
-        end
-        bufmap('i', '<c-->', '<Plug>RInsertAssign')
-        bufmap('i', '<space><space>', '<Plug>RInsertPipe')
-        bufmap('i', '`', '<Plug>RmdInsertChunk')
-        bufmap('n', '<Enter>', '<Plug>RDSendLine')
-        bufmap('v', '<Enter>', '<Plug>RSendSelection')
-        bufmap('n', '<localleader>rr', '<cmd>RMapsDesc<cr>', 'R mappings')
-        bufmap('n', '<localleader>rx', '<Plug>RClose', 'Close R')
-        bufmap('i', '%%', ' %>%')
-        bufmap('n', '<localleader><enter>', '<Plug>RSendLine', 'Send line and stay')
-        bufmap('n', '<localleader>N', '<Plug>RPreviousRChunk', 'Go to previous chunk')
-        bufmap('n', '<localleader>n', '<Plug>RNextRChunk', 'Go to next chunk')
-        bufmap('n', '<localleader>h', '<Plug>RHelp', 'R help')
-        bufmap(
-          'n',
-          '<LocalLeader>rh',
-          "<cmd>lua require('r.run').action('head', 'n', ', n = 15')<cr>",
-          'head() on <cword>'
-        )
-        bufmap('n', '<LocalLeader>kx', "<cmd>lua require('r.rmd').make('pptx')<cr>", 'Knit pptx')
-      end,
-    },
-    pdfviewer = 'open',
-    quarto_chunk_hl = {
-      highlight = false,
-      virtual_title = true,
-      events = '',
-    },
   })
 end)
 
@@ -348,109 +262,109 @@ later(function()
   })
 end)
 
-later(function()
-  add({ 'https://github.com/mawkler/demicolon.nvim' })
-  require('demicolon').setup({
-    keymaps = {
-      horizontal_motions = false,
-      -- repeat_motions = 'stateful', -- Don't create ; and , keymaps
-      repeat_motions = false, -- Don't create ; and , keymaps
-    },
-  })
-
-  local map, nxo = vim.keymap.set, { 'n', 'x', 'o' }
-
-  map(nxo, ',', require('demicolon.repeat_jump').next)
-  map(nxo, ';', require('demicolon.repeat_jump').prev)
-
-  local flash_char = require('flash.plugins.char')
-  ---@param options { key: string, fowrard: boolean }
-  local function flash_jump(options)
-    return function()
-      require('demicolon.jump').repeatably_do(function(o)
-        local key = o.forward and o.key:lower() or o.key:upper()
-
-        flash_char.jumping = true
-        local autohide = require('flash.config').get('char').autohide
-
-        -- Originally was
-        -- if require("flash.repeat").is_repeat then
-        if o.repeated then
-          flash_char.jump_labels = false
-
-          -- Originally was
-          -- flash_char.state:jump({ count = vim.v.count1 })
-          if o.forward then
-            flash_char.right()
-          else
-            flash_char.left()
-          end
-
-          flash_char.state:show()
-        else
-          flash_char.jump(key)
-        end
-
-        vim.schedule(function()
-          flash_char.jumping = false
-          if flash_char.state and autohide then
-            flash_char.state:hide()
-          end
-        end)
-      end, options)
-    end
-  end
-
-  vim.api.nvim_create_autocmd({ 'BufLeave', 'CursorMoved', 'InsertEnter' }, {
-    group = vim.api.nvim_create_augroup('flash_char', { clear = true }),
-    callback = function(event)
-      local hide = event.event == 'InsertEnter' or not flash_char.jumping
-      if hide and flash_char.state then
-        flash_char.state:hide()
-      end
-    end,
-  })
-
-  vim.on_key(function(key)
-    if flash_char.state and key == require('flash.util').ESC and (vim.fn.mode() == 'n' or vim.fn.mode() == 'v') then
-      flash_char.state:hide()
-    end
-  end)
-
-  vim.keymap.set({ 'n', 'x', 'o' }, 'f', flash_jump({ key = 'f', forward = true }), { desc = 'Flash f' })
-  vim.keymap.set({ 'n', 'x', 'o' }, 'F', flash_jump({ key = 'F', forward = false }), { desc = 'Flash F' })
-  vim.keymap.set({ 'n', 'x', 'o' }, 't', flash_jump({ key = 't', forward = true }), { desc = 'Flash t' })
-  vim.keymap.set({ 'n', 'x', 'o' }, 'T', flash_jump({ key = 'T', forward = false }), { desc = 'Flash T' })
-
-  local function todo_jump(options)
-    return function()
-      require('demicolon.jump').repeatably_do(function(o)
-        local forward = o.forward
-        if forward then
-          require('todo-comments').jump_next()
-        else
-          require('todo-comments').jump_prev()
-        end
-      end, options)
-    end
-  end
-  vim.keymap.set({ 'n', 'x', 'o' }, '[t', todo_jump({ forward = false }))
-  vim.keymap.set({ 'n', 'x', 'o' }, ']t', todo_jump({ forward = true }))
-end)
+-- later(function()
+--   add({ 'https://github.com/mawkler/demicolon.nvim' })
+--   require('demicolon').setup({
+--     keymaps = {
+--       horizontal_motions = false,
+--       -- repeat_motions = 'stateful', -- Don't create ; and , keymaps
+--       repeat_motions = false, -- Don't create ; and , keymaps
+--     },
+--   })
+--
+--   local map, nxo = vim.keymap.set, { 'n', 'x', 'o' }
+--
+--   map(nxo, ',', require('demicolon.repeat_jump').next)
+--   map(nxo, ';', require('demicolon.repeat_jump').prev)
+--
+--   local flash_char = require('flash.plugins.char')
+--   ---@param options { key: string, fowrard: boolean }
+--   local function flash_jump(options)
+--     return function()
+--       require('demicolon.jump').repeatably_do(function(o)
+--         local key = o.forward and o.key:lower() or o.key:upper()
+--
+--         flash_char.jumping = true
+--         local autohide = require('flash.config').get('char').autohide
+--
+--         -- Originally was
+--         -- if require("flash.repeat").is_repeat then
+--         if o.repeated then
+--           flash_char.jump_labels = false
+--
+--           -- Originally was
+--           -- flash_char.state:jump({ count = vim.v.count1 })
+--           if o.forward then
+--             flash_char.right()
+--           else
+--             flash_char.left()
+--           end
+--
+--           flash_char.state:show()
+--         else
+--           flash_char.jump(key)
+--         end
+--
+--         vim.schedule(function()
+--           flash_char.jumping = false
+--           if flash_char.state and autohide then
+--             flash_char.state:hide()
+--           end
+--         end)
+--       end, options)
+--     end
+--   end
+--
+--   vim.api.nvim_create_autocmd({ 'BufLeave', 'CursorMoved', 'InsertEnter' }, {
+--     group = vim.api.nvim_create_augroup('flash_char', { clear = true }),
+--     callback = function(event)
+--       local hide = event.event == 'InsertEnter' or not flash_char.jumping
+--       if hide and flash_char.state then
+--         flash_char.state:hide()
+--       end
+--     end,
+--   })
+--
+--   vim.on_key(function(key)
+--     if flash_char.state and key == require('flash.util').ESC and (vim.fn.mode() == 'n' or vim.fn.mode() == 'v') then
+--       flash_char.state:hide()
+--     end
+--   end)
+--
+--   vim.keymap.set({ 'n', 'x', 'o' }, 'f', flash_jump({ key = 'f', forward = true }), { desc = 'Flash f' })
+--   vim.keymap.set({ 'n', 'x', 'o' }, 'F', flash_jump({ key = 'F', forward = false }), { desc = 'Flash F' })
+--   vim.keymap.set({ 'n', 'x', 'o' }, 't', flash_jump({ key = 't', forward = true }), { desc = 'Flash t' })
+--   vim.keymap.set({ 'n', 'x', 'o' }, 'T', flash_jump({ key = 'T', forward = false }), { desc = 'Flash T' })
+--
+--   local function todo_jump(options)
+--     return function()
+--       require('demicolon.jump').repeatably_do(function(o)
+--         local forward = o.forward
+--         if forward then
+--           require('todo-comments').jump_next()
+--         else
+--           require('todo-comments').jump_prev()
+--         end
+--       end, options)
+--     end
+--   end
+--   vim.keymap.set({ 'n', 'x', 'o' }, '[t', todo_jump({ forward = false }))
+--   vim.keymap.set({ 'n', 'x', 'o' }, ']t', todo_jump({ forward = true }))
+-- end)
 
 -- later(function()
 --     add({ 'https://github.com/hat0uma/csvview.nvim' })
 --     require('csvview').setup()
 -- end)
 
-later(function()
-  add({ 'https://github.com/rachartier/tiny-cmdline.nvim' })
-  vim.o.cmdheight = 0
-  require('vim._core.ui2').enable({})
-  require('tiny-cmdline').setup({
-    position = {
-      y = '30%',
-    },
-    native_types = {},
-  })
-end)
+-- later(function()
+--   add({ 'https://github.com/rachartier/tiny-cmdline.nvim' })
+--   vim.o.cmdheight = 0
+--   require('vim._core.ui2').enable({})
+--   require('tiny-cmdline').setup({
+--     position = {
+--       y = '30%',
+--     },
+--     native_types = {},
+--   })
+-- end)
