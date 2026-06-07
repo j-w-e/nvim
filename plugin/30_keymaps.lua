@@ -385,6 +385,9 @@ nmap_leader('vL', '<Cmd>lua MiniVisits.remove_label()<CR>',       'Remove label'
 nmap_leader('vs', '<cmd>lua MiniStarter.open()<cr>', 'Show start screen')
 -- nmap_leader('vu', Config.update, 'Deps update')
 
+-- k is for 'key'
+nmap_leader('k', make_pick_core('',  'Core visits (all)'),       'Core visits (all)')
+
 -- x is for 'eXit'
 nmap_leader('x', '<cmd>q<cr>', 'Quit')
 nmap_leader('X', '<cmd>qa!<cr>', 'Really quit')
