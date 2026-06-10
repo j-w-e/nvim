@@ -579,6 +579,37 @@ later(function()
   })
 end)
 
+later(function()
+  local input = require('mini.input')
+  -- Choose initial style based on the scope
+  local floatwin = input.gen_view.floatwin
+  local view_mm = floatwin({ style = 'MM' })
+  local view_bl = floatwin({ style = 'BL' })
+  local view_handler = function(state)
+    local scope, view = state.opts.scope, view_mm
+    if scope == 'cursor' or scope == 'line' then
+      view = view_bl
+    end
+    return view(state)
+  end
+
+  input.setup({ handlers = { view = view_handler } })
+  -- require('mini.input').setup({})
+  -- local key_handler = function(state, key)
+  --   -- <C-a> - move caret to start of line
+  --   if key == '\1' then
+  --     state.caret = 1
+  --   -- <S-BS> - clear all input
+  --   elseif key == vim.keycode('<S-BS>') then
+  --     state.input, state.caret = '', 1
+  --   else
+  --     -- IMPORTANT: Fall back to processing as usual
+  --     return MiniInput.default_key(state, key)
+  --   end
+  -- end
+  -- require('mini.input').setup({ handlers = { key = key_handler } })
+end)
+
 -- Jump to next/previous single character. It implements "smarter `fFtT` keys"
 -- (see `:h f`) that work across multiple lines, start "jumping mode", and
 -- highlight all target matches.
