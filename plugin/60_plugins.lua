@@ -61,6 +61,7 @@ now_if_args(function()
   add({ 'https://github.com/neovim/nvim-lspconfig' })
   vim.lsp.enable({
     'lua_ls',
+    'air',
   })
 end)
 
@@ -77,9 +78,9 @@ later(function()
     -- Map of filetype to formatters
     formatters_by_ft = {
       lua = { 'stylua' },
-      quarto = { 'styler' },
-      r = { 'styler' },
-      -- rmd = { 'styler' },
+      quarto = { 'injected' },
+      rmd = { 'injected' },
+      r = { 'air' },
       ['*'] = { 'trim_whitespace' },
     },
     formatters = {
@@ -87,18 +88,22 @@ later(function()
         prepend_args = { '--indent-type', 'Spaces', '--indent-width', '2', '--quote-style', 'AutoPreferSingle' },
       },
     },
-    format_on_save = function(bufnr)
-      -- Disable with a global or buffer-local variable
-      if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
-        return
-      end
-      -- Disable autoformat on certain filetypes
-      local slow_filetypes = { 'quarto', 'r', 'qmd', 'rmd' }
-      if vim.tbl_contains(slow_filetypes, vim.bo[bufnr].filetype) then
-        return { timeout_ms = 3000, lsp_format = 'fallback' }
-      end
-      return { timeout_ms = 500, lsp_format = 'fallback' }
-    end,
+    format_on_save = {
+      lsp_format = 'fallback',
+      timeout_ms = 500,
+    },
+    -- format_on_save = function(bufnr)
+    --   -- Disable with a global or buffer-local variable
+    --   if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+    --     return
+    --   end
+    --   -- Disable autoformat on certain filetypes
+    --   local slow_filetypes = { 'quarto', 'r', 'qmd', 'rmd' }
+    --   if vim.tbl_contains(slow_filetypes, vim.bo[bufnr].filetype) then
+    --     return { timeout_ms = 3000, lsp_format = 'fallback' }
+    --   end
+    --   return { timeout_ms = 500, lsp_format = 'fallback' }
+    -- end,
   })
 end)
 
