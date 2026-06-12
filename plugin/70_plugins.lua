@@ -266,95 +266,96 @@ later(function()
   })
 end)
 
--- later(function()
---   add({ 'https://github.com/mawkler/demicolon.nvim' })
---   require('demicolon').setup({
---     keymaps = {
---       horizontal_motions = false,
---       -- repeat_motions = 'stateful', -- Don't create ; and , keymaps
---       repeat_motions = false, -- Don't create ; and , keymaps
---     },
---   })
---
---   local map, nxo = vim.keymap.set, { 'n', 'x', 'o' }
---
---   map(nxo, ',', require('demicolon.repeat_jump').next)
---   map(nxo, ';', require('demicolon.repeat_jump').prev)
---
---   local flash_char = require('flash.plugins.char')
---   ---@param options { key: string, fowrard: boolean }
---   local function flash_jump(options)
---     return function()
---       require('demicolon.jump').repeatably_do(function(o)
---         local key = o.forward and o.key:lower() or o.key:upper()
---
---         flash_char.jumping = true
---         local autohide = require('flash.config').get('char').autohide
---
---         -- Originally was
---         -- if require("flash.repeat").is_repeat then
---         if o.repeated then
---           flash_char.jump_labels = false
---
---           -- Originally was
---           -- flash_char.state:jump({ count = vim.v.count1 })
---           if o.forward then
---             flash_char.right()
---           else
---             flash_char.left()
---           end
---
---           flash_char.state:show()
---         else
---           flash_char.jump(key)
---         end
---
---         vim.schedule(function()
---           flash_char.jumping = false
---           if flash_char.state and autohide then
---             flash_char.state:hide()
---           end
---         end)
---       end, options)
---     end
---   end
---
---   vim.api.nvim_create_autocmd({ 'BufLeave', 'CursorMoved', 'InsertEnter' }, {
---     group = vim.api.nvim_create_augroup('flash_char', { clear = true }),
---     callback = function(event)
---       local hide = event.event == 'InsertEnter' or not flash_char.jumping
---       if hide and flash_char.state then
---         flash_char.state:hide()
---       end
---     end,
---   })
---
---   vim.on_key(function(key)
---     if flash_char.state and key == require('flash.util').ESC and (vim.fn.mode() == 'n' or vim.fn.mode() == 'v') then
---       flash_char.state:hide()
---     end
---   end)
---
---   vim.keymap.set({ 'n', 'x', 'o' }, 'f', flash_jump({ key = 'f', forward = true }), { desc = 'Flash f' })
---   vim.keymap.set({ 'n', 'x', 'o' }, 'F', flash_jump({ key = 'F', forward = false }), { desc = 'Flash F' })
---   vim.keymap.set({ 'n', 'x', 'o' }, 't', flash_jump({ key = 't', forward = true }), { desc = 'Flash t' })
---   vim.keymap.set({ 'n', 'x', 'o' }, 'T', flash_jump({ key = 'T', forward = false }), { desc = 'Flash T' })
---
---   local function todo_jump(options)
---     return function()
---       require('demicolon.jump').repeatably_do(function(o)
---         local forward = o.forward
---         if forward then
---           require('todo-comments').jump_next()
---         else
---           require('todo-comments').jump_prev()
---         end
---       end, options)
---     end
---   end
---   vim.keymap.set({ 'n', 'x', 'o' }, '[t', todo_jump({ forward = false }))
---   vim.keymap.set({ 'n', 'x', 'o' }, ']t', todo_jump({ forward = true }))
--- end)
+later(function()
+  add({ 'https://github.com/mawkler/demicolon.nvim' })
+  add({ 'https://github.com/nvim-treesitter/nvim-treesitter-textobjects' })
+  require('demicolon').setup({
+    keymaps = {
+      horizontal_motions = false,
+      -- repeat_motions = 'stateful', -- Don't create ; and , keymaps
+      repeat_motions = false, -- Don't create ; and , keymaps
+    },
+  })
+
+  local map, nxo = vim.keymap.set, { 'n', 'x', 'o' }
+
+  map(nxo, ',', require('demicolon.repeat_jump').next)
+  map(nxo, ';', require('demicolon.repeat_jump').prev)
+
+  local flash_char = require('flash.plugins.char')
+  ---@param options { key: string, fowrard: boolean }
+  local function flash_jump(options)
+    return function()
+      require('demicolon.jump').repeatably_do(function(o)
+        local key = o.forward and o.key:lower() or o.key:upper()
+
+        flash_char.jumping = true
+        local autohide = require('flash.config').get('char').autohide
+
+        -- Originally was
+        -- if require("flash.repeat").is_repeat then
+        if o.repeated then
+          flash_char.jump_labels = false
+
+          -- Originally was
+          -- flash_char.state:jump({ count = vim.v.count1 })
+          if o.forward then
+            flash_char.right()
+          else
+            flash_char.left()
+          end
+
+          flash_char.state:show()
+        else
+          flash_char.jump(key)
+        end
+
+        vim.schedule(function()
+          flash_char.jumping = false
+          if flash_char.state and autohide then
+            flash_char.state:hide()
+          end
+        end)
+      end, options)
+    end
+  end
+
+  vim.api.nvim_create_autocmd({ 'BufLeave', 'CursorMoved', 'InsertEnter' }, {
+    group = vim.api.nvim_create_augroup('flash_char', { clear = true }),
+    callback = function(event)
+      local hide = event.event == 'InsertEnter' or not flash_char.jumping
+      if hide and flash_char.state then
+        flash_char.state:hide()
+      end
+    end,
+  })
+
+  vim.on_key(function(key)
+    if flash_char.state and key == require('flash.util').ESC and (vim.fn.mode() == 'n' or vim.fn.mode() == 'v') then
+      flash_char.state:hide()
+    end
+  end)
+
+  vim.keymap.set({ 'n', 'x', 'o' }, 'f', flash_jump({ key = 'f', forward = true }), { desc = 'Flash f' })
+  vim.keymap.set({ 'n', 'x', 'o' }, 'F', flash_jump({ key = 'F', forward = false }), { desc = 'Flash F' })
+  vim.keymap.set({ 'n', 'x', 'o' }, 't', flash_jump({ key = 't', forward = true }), { desc = 'Flash t' })
+  vim.keymap.set({ 'n', 'x', 'o' }, 'T', flash_jump({ key = 'T', forward = false }), { desc = 'Flash T' })
+
+  local function todo_jump(options)
+    return function()
+      require('demicolon.jump').repeatably_do(function(o)
+        local forward = o.forward
+        if forward then
+          require('todo-comments').jump_next()
+        else
+          require('todo-comments').jump_prev()
+        end
+      end, options)
+    end
+  end
+  vim.keymap.set({ 'n', 'x', 'o' }, '[t', todo_jump({ forward = false }))
+  vim.keymap.set({ 'n', 'x', 'o' }, ']t', todo_jump({ forward = true }))
+end)
 
 -- later(function()
 --     add({ 'https://github.com/hat0uma/csvview.nvim' })
