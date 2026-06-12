@@ -8,7 +8,6 @@
 --]]
 
 --[[ TODO list
-1. Find out why vim.treesitter.start() on R files (and derivatives) removes syntax highlighting.
 4. Find out why following an obsidian link does not re-open file at last edited point
 5. Decide if I want <leader>, or <c-,> to open FTerm
 6. Sometimes, enter in markdown after a colon indents 2 spaces, not 4. Find out why?
@@ -17,7 +16,6 @@
         - I think this, because it seems to happen more if I edit my config whilst in notes mode. Keep an eye out for it.
 10 Replace obsidian.nvim with an alternative, eg https://github.com/magnusriga/markdown-tools.nvim or https://github.com/YousefHadder/markdown-plus.nvim
     - obsidian.nvim does not allow linking to aliases, currently
-13. Make unception work. Currently, it just closes the terminal buffer
 
 Notes for later tweaks:
 1. I could not get <c-l> to insert a link in Obsidian, when using mini.pick. It works with snacks.picker, so I'm using that for now.
