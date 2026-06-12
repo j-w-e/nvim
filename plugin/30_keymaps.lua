@@ -182,26 +182,6 @@ nmap_leader('od', function()
   local offset = (friday - today) % 7
   vim.cmd('Obsidian today ' .. offset)
 end, 'Open weekly note')
--- TODO do I have to adjust this based on my adjusted session.vim file?
-nmap_leader('oW',
-      function()
-        MiniSessions.write 'zzz-notes-tmp'
-        local session_file = '/Users/hughearp/.local/share/nvim/session/zzz-notes-tmp'
-        local lines = vim.fn.readfile(session_file)
-        table.insert(lines, 3, 'set title')
-        table.insert(lines, 4, 'set titlestring=notes')
-        vim.fn.writefile(lines, session_file)
-      end,
-      'Save tmp session'
-    )
-nmap_leader('oO', '<cmd>lua MiniSessions.read("zzz-notes-tmp")<cr>', 'Open tmp session')
-nmap_leader('ow',
-      function()
-        vim.o.title = true
-        vim.o.titlestring = 'notes'
-      end,
-      'Set window title')
-
 
 -- s is for 'Session'. Common usage:
 local session_new = 'vim.ui.input({ prompt = "Session name: " }, MiniSessions.write)'
