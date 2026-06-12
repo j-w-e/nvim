@@ -67,8 +67,6 @@ if Config.conf_ver == 'notes' then
       },
       checkbox = { create_new = false },
       completion = {
-        nvim_cmp = false,
-        blink = true,
         create_new = true,
       },
       picker = {
