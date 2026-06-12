@@ -387,6 +387,35 @@ if Config.conf_ver ~= 'notes' then
     -- Advertise to servers that Neovim now supports certain set of completion and
     -- signature features through 'mini.completion'.
     vim.lsp.config('*', { capabilities = MiniCompletion.get_lsp_capabilities() })
+    vim.keymap.set('i', '<CR>', function()
+      local info = vim.fn.complete_info({ 'selected' })
+
+      -- An item has been explicitly selected with <C-n>/<C-p>, arrows, etc.
+      if info.selected >= 0 then
+        return '<C-y>'
+      end
+
+      -- Otherwise insert a newline
+      return MiniPairs.cr()
+    end, { expr = true })
+    vim.keymap.set('i', '<C-y>', function()
+      local info = vim.fn.complete_info({ 'selected', 'pum_visible' })
+
+      if info.pum_visible == 1 and info.selected == -1 then
+        -- Select first item and confirm it
+        return '<C-n><C-y>'
+      end
+
+      return '<C-y>'
+    end, { expr = true })
+
+    -- vim.keymap.set('i', '<CR>', function()
+    --   if vim.fn.pumvisible() == 1 then
+    --     return '<C-e>' .. require('mini.pairs').cr()
+    --   end
+    --
+    --   return require('mini.pairs').cr()
+    -- end, { expr = true })
   end)
 end
 
@@ -632,7 +661,7 @@ later(function()
   MiniKeymap.map_multistep('i', '<S-Tab>', { 'pmenu_prev' })
   -- On `<CR>` try to accept current completion item, fall back to accounting
   -- for pairs from 'mini.pairs'
-  MiniKeymap.map_multistep('i', '<CR>', { 'pmenu_accept', 'minipairs_cr' })
+  -- MiniKeymap.map_multistep('i', '<CR>', { 'pmenu_accept', 'minipairs_cr' })
   -- On `<BS>` just try to account for pairs from 'mini.pairs'
   MiniKeymap.map_multistep('i', '<BS>', { 'minipairs_bs' })
 end)
