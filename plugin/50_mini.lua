@@ -255,11 +255,11 @@ end)
 
 -- Go forward/backward with square brackets. Implements consistent sets of mappings
 -- for selected targets (like buffers, diagnostic, quickfix list entries, etc.).
-later(function()
-  require('mini.bracketed').setup({
-    treesitter = { suffix = 'r', options = {} },
-  })
-end)
+-- later(function()
+--   require('mini.bracketed').setup({
+--     treesitter = { suffix = 'r', options = {} },
+--   })
+-- end)
 
 -- Remove buffers. Opened files occupy space in tabline and buffer picker.
 -- When not needed, they can be removed.

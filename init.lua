@@ -8,7 +8,6 @@
 --]]
 
 --[[ TODO list
-1. Fix demicolon for buffer navigation. Currently, :bufnext means that , goes to bufprev, rather than continuing the motion.
 4. Find out why following an obsidian link does not re-open file at last edited point
 5. Decide if I want <leader>, or <c-,> to open FTerm
 6. Sometimes, enter in markdown after a colon indents 2 spaces, not 4. Find out why?
