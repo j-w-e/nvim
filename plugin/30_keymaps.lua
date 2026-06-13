@@ -92,7 +92,7 @@ nmap_leader('el', explore_locations,                        'Locations')
 nmap_leader('em', edit_plugin_file('50_mini.lua'),          'MINI config')
 nmap_leader('en', '<Cmd>lua MiniNotify.show_history()<CR>', 'Notifications')
 nmap_leader('eo', edit_plugin_file('10_options.lua'),       'Options config')
-nmap_leader('ep', edit_plugin_file('60_plugins.lua'),       'Plugins config')
+nmap_leader('ep', edit_plugin_file('70_plugins.lua'),       'Plugins config')
 nmap_leader('eq', explore_quickfix,                         'Quickfix')
 
 -- f is for 'Fuzzy Find'.
@@ -167,6 +167,8 @@ xmap_leader('lf', '<Cmd>lua require("conform").format()<CR>',   'Format selectio
 nmap_leader('m.', '@:', 'Repeat last command')
 nmap_leader('md', '<cmd>lcd %:p:h<cr>', 'Local cd to file')
 nmap_leader('ml', "'L", 'Lian')
+nmap_leader('ma', "'A", 'Index')
+nmap_leader('mi', "'I", 'Inbox')
 
 -- o is for 'Obsidian'.
 nmap_leader('oz', '<Cmd>lua MiniMisc.zoom()<CR>',        'Zoom toggle')

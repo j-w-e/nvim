@@ -283,7 +283,7 @@ later(function()
   map(nxo, ';', require('demicolon.repeat_jump').prev)
 
   local flash_char = require('flash.plugins.char')
-  ---@param options { key: string, fowrard: boolean }
+  ---@param options { key: string, forward: boolean }
   local function flash_jump(options)
     return function()
       require('demicolon.jump').repeatably_do(function(o)
