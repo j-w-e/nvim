@@ -114,7 +114,7 @@ local function make_char_jump(reverse, till, record)
       return
     end
 
-    local pattern = vim.pesc(char)
+    local pattern = '\\V' .. vim.fn.escape(char, [[\]])
 
     local function do_jump(o)
       highlight_char(char)
