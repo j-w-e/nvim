@@ -260,6 +260,21 @@ later(function()
   })
 end)
 
+later(function()
+  add({ 'https://github.com/hat0uma/csvview.nvim' })
+  require('csvview').setup({
+    view = {
+      min_column_width = 5,
+      spacing = 2,
+      display_mode = 'border',
+      sticky_header = {
+        enabled = true,
+        separator = '─',
+      },
+    },
+  })
+end)
+
 -- later(function()
 --   add({ 'https://github.com/mawkler/demicolon.nvim' })
 --   add({ 'https://github.com/nvim-treesitter/nvim-treesitter-textobjects' })
@@ -349,11 +364,6 @@ end)
 --   end
 --   vim.keymap.set({ 'n', 'x', 'o' }, '[t', todo_jump({ forward = false }))
 --   vim.keymap.set({ 'n', 'x', 'o' }, ']t', todo_jump({ forward = true }))
--- end)
-
--- later(function()
---     add({ 'https://github.com/hat0uma/csvview.nvim' })
---     require('csvview').setup()
 -- end)
 
 -- later(function()
