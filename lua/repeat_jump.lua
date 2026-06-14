@@ -4,6 +4,7 @@ local M = {}
 -- Highlight state
 --------------------------------------------------
 local hl_matches = {}
+local hl_timer = nil
 
 local function clear_highlight()
   for _, id in ipairs(hl_matches) do
@@ -86,7 +87,24 @@ local function highlight_char(char)
     end
   end
 
-  vim.defer_fn(clear_highlight, 1000)
+  -- cancel previous timer if it exists
+  if hl_timer then
+    hl_timer:stop()
+    hl_timer:close()
+  end
+
+  -- start a new timer
+  hl_timer = vim.uv.new_timer()
+  hl_timer:start(
+    1000,
+    0,
+    vim.schedule_wrap(function()
+      clear_highlight()
+      hl_timer:stop()
+      hl_timer:close()
+      hl_timer = nil
+    end)
+  )
 end
 
 local function make_char_jump(reverse, till, record)
@@ -96,11 +114,10 @@ local function make_char_jump(reverse, till, record)
       return
     end
 
-    highlight_char(char)
-
     local pattern = vim.pesc(char)
 
     local function do_jump(o)
+      highlight_char(char)
       local flags = o.reverse and 'bW' or 'W'
 
       -- avoid re-hitting same match
