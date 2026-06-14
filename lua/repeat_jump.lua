@@ -119,31 +119,47 @@ local function make_char_jump(reverse, till, record)
     local function do_jump(o)
       highlight_char(char)
 
+      local orig_pos = vim.api.nvim_win_get_cursor(0)
+      local line, col0 = orig_pos[1], orig_pos[2] -- 0-based
+      local col = col0 + 1 -- 1-based
+
       local flags = o.reverse and 'bW' or 'W'
 
-      -- Save original cursor
-      local orig_pos = vim.api.nvim_win_get_cursor(0)
+      local start_col = col
 
-      -- avoid re-hitting same match
-      local line = orig_pos[1]
-      local col = orig_pos[2] + 1 -- convert to 1-based
-
-      local new_col = col + (o.reverse and -1 or 1)
-      if new_col < 1 then
-        new_col = 1
+      if o.till then
+        -- ✅ t/T skip the adjacent char
+        start_col = col + (o.reverse and -1 or 1)
       end
 
-      vim.api.nvim_win_set_cursor(0, { line, new_col - 1 })
+      -- Clamp
+      if start_col < 1 then
+        start_col = 1
+      end
+
+      vim.api.nvim_win_set_cursor(0, { line, start_col - 1 })
 
       local pos = vim.fn.search(o.pattern, flags)
 
       if pos == 0 then
-        -- ❌ restore original position if search failed
         vim.api.nvim_win_set_cursor(0, orig_pos)
         return
       end
 
-      -- ✅ apply 't' behavior only if match found
+      -- ✅ f/F skip current position IF we landed on it
+      if not o.till then
+        local cur = vim.api.nvim_win_get_cursor(0)
+        if cur[1] == line and cur[2] == col0 then
+          -- we're still on original position → search again
+          local pos2 = vim.fn.search(o.pattern, flags)
+          if pos2 == 0 then
+            vim.api.nvim_win_set_cursor(0, orig_pos)
+            return
+          end
+        end
+      end
+
+      -- ✅ apply t offset AFTER match
       if o.till then
         local offset = o.reverse and 1 or -1
         vim.api.nvim_win_set_cursor(0, {

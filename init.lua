@@ -8,6 +8,7 @@
 --]]
 
 --[[ TODO list
+1. Update my custom repeat_jump to work in operator-pending mode across lines
 4. Find out why following an obsidian link does not re-open file at last edited point
 5. Decide if I want <leader>, or <c-,> to open FTerm
 6. Sometimes, enter in markdown after a colon indents 2 spaces, not 4. Find out why?
