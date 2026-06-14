@@ -118,11 +118,16 @@ local function make_char_jump(reverse, till, record)
 
     local function do_jump(o)
       highlight_char(char)
+
       local flags = o.reverse and 'bW' or 'W'
 
+      -- Save original cursor
+      local orig_pos = vim.api.nvim_win_get_cursor(0)
+
       -- avoid re-hitting same match
-      local line = vim.fn.line('.')
-      local col = vim.fn.col('.')
+      local line = orig_pos[1]
+      local col = orig_pos[2] + 1 -- convert to 1-based
+
       local new_col = col + (o.reverse and -1 or 1)
       if new_col < 1 then
         new_col = 1
@@ -131,7 +136,15 @@ local function make_char_jump(reverse, till, record)
       vim.api.nvim_win_set_cursor(0, { line, new_col - 1 })
 
       local pos = vim.fn.search(o.pattern, flags)
-      if pos > 0 and o.till then
+
+      if pos == 0 then
+        -- ❌ restore original position if search failed
+        vim.api.nvim_win_set_cursor(0, orig_pos)
+        return
+      end
+
+      -- ✅ apply 't' behavior only if match found
+      if o.till then
         local offset = o.reverse and 1 or -1
         vim.api.nvim_win_set_cursor(0, {
           vim.fn.line('.'),
