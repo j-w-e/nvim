@@ -210,6 +210,9 @@ function M.setup_bracketed()
   map(']c', bracketed.comment, 'forward')
   map('[c', bracketed.comment, 'backward')
 
+  map(']f', bracketed.file, 'forward')
+  map('[f', bracketed.file, 'backward')
+
   map(']q', bracketed.quickfix, 'forward')
   map('[q', bracketed.quickfix, 'backward')
 end
