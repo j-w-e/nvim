@@ -204,6 +204,9 @@ function M.setup_bracketed()
   map(']b', bracketed.buffer, 'forward')
   map('[b', bracketed.buffer, 'backward')
 
+  map('<m-l>', bracketed.buffer, 'forward')
+  map('<m-h>', bracketed.buffer, 'backward')
+
   map(']c', bracketed.comment, 'forward')
   map('[c', bracketed.comment, 'backward')
 

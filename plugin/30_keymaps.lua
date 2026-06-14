@@ -490,8 +490,7 @@ require('mini.keymap').map_combo('i', 'jj', '<BS><BS><c-o>')
 vim.keymap.set({ 'i', 't', 'c' }, '<M-BS>', '<c-w>', { desc = 'Delete word' })
 
 -- Bind <m- > for buffer navigation
-nmap('<m-l>', '<cmd>bnext<cr>', 'Next buffer')
-nmap('<m-h>', '<cmd>bprev<cr>', 'Prev buffer')
+-- see repeat_jump.lua for next and prev buffers
 nmap('<m-b>', '<Cmd>b#<CR>', 'Alternate buffer')
 nmap('<m-x>', '<cmd>lua MiniBufremove.delete()<cr>', 'Delete buffer')
 
