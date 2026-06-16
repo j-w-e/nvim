@@ -167,6 +167,7 @@ xmap_leader('lf', '<Cmd>lua require("conform").format()<CR>',   'Format selectio
 nmap_leader('m.', '@:', 'Repeat last command')
 nmap_leader('md', '<cmd>lcd %:p:h<cr>', 'Local cd to file')
 nmap_leader('ml', "'L", 'Lian')
+nmap_leader('mm', "'M", 'Lian')
 nmap_leader('ma', "'A", 'Index')
 nmap_leader('mi', "'I", 'Inbox')
 
