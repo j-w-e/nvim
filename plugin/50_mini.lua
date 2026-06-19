@@ -422,21 +422,25 @@ end
 -- Autohighlight word under cursor with a customizable delay.
 -- Word boundaries are defined based on `:h 'iskeyword'` option.
 later(function()
-  cursorword_blocklist = function()
-    local curword = vim.fn.expand('<cword>')
-    local filetype = vim.bo.filetype
+  if Config.conf_ver == 'notes' then
+    vim.b.minicursorword_disable = true
+  else
+    cursorword_blocklist = function()
+      local curword = vim.fn.expand('<cword>')
+      local filetype = vim.bo.filetype
 
-    -- Add any disabling global or filetype-specific logic here
-    local blocklist = {}
-    if filetype == 'lua' then
-      blocklist = { 'local', 'require', '--' }
-    elseif filetype == 'javascript' then
-      blocklist = { 'import' }
+      -- Add any disabling global or filetype-specific logic here
+      local blocklist = {}
+      if filetype == 'lua' then
+        blocklist = { 'local', 'require', '--', 'end', 'if' }
+      elseif filetype == 'javascript' then
+        blocklist = { 'import' }
+      end
+
+      vim.b.minicursorword_disable = vim.tbl_contains(blocklist, curword)
     end
-
-    vim.b.minicursorword_disable = vim.tbl_contains(blocklist, curword)
+    vim.cmd('au CursorMoved * lua cursorword_blocklist()')
   end
-  vim.cmd('au CursorMoved * lua cursorword_blocklist()')
   require('mini.cursorword').setup()
 end)
 
@@ -464,6 +468,7 @@ now_if_args(function()
     mappings = {
       go_in = 'L',
       go_in_plus = 'l',
+      synchronize = '<leader>fw',
     },
     windows = { preview = true },
   })
